@@ -9,7 +9,7 @@ namespace Diploma.Backend.Domain.Enums
     public enum ErrorCodes
     {
         InvalidPasswordException,
-        InvalidEmailException,
+        UnexistingEmailException,
         ExistingEmailException,
     }
 }
