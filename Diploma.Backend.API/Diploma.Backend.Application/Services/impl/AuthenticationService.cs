@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,25 @@ namespace Diploma.Backend.Application.Services.impl
                     : BaseResponseGenerator.GenerateBaseResponseByErrorMessage<LoginResponse>(currUser.Error.Message);
         }
 
+        public async Task<BaseResponse<LoginResponse>> Register(RegisterRequest registerRequest)
+        {
+            bool isEmailExists = await IsEmailExists(registerRequest.Email);
+            
+            if (isEmailExists)
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<LoginResponse>(ErrorCodes.ExistingEmailException);
+            
+            User user = RegisterMapper.ConvertRegisterToUser(registerRequest);
+            await AddUserToDb(user);
+
+            return GenerateSuccessfulLoginResponse(user);
+        }
+
+        private async Task AddUserToDb(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+        }
+
         private BaseResponse<LoginResponse> GenerateSuccessfulLoginResponse(User user)
         {
             var token = UserExtensions.GenerateTokenFromUser(user, _config["Jwt:Key"], _config["Jwt:Issuer"], _config["Jwt:Audience"]);
@@ -59,6 +79,12 @@ namespace Diploma.Backend.Application.Services.impl
             }
 
             return BaseResponseGenerator.GenerateValidBaseResponseByUser<User>(user);
+        }
+
+        private async Task<bool> IsEmailExists(string email)
+        {
+            User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            return user != null;
         }
     }
 }
