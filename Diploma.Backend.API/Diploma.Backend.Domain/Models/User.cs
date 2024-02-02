@@ -15,5 +15,6 @@ namespace Diploma.Backend.Domain.Models
         public string LastName { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
+        public List<Survey> Surveys { get; set; } = new List<Survey>();
     }
 }
