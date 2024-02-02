@@ -12,5 +12,6 @@ namespace Diploma.Backend.Application.Services
     public interface IAuthenticationService
     {
         public Task<BaseResponse<LoginResponse>> Login(LoginRequest loginRequest);
+        public Task<BaseResponse<LoginResponse>> Register(RegisterRequest registerRequest);
     }
 }
