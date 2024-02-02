@@ -1,6 +1,7 @@
 ﻿using Diploma.Backend.Application.Dto.Request;
 using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Application.Services;
+using Diploma.Backend.Domain.Common;
 using Diploma.Backend.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,9 +23,24 @@ namespace Diploma.Backend.API.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse<LoginResponse>>> Login([FromBody] LoginRequest request)
         {
             var result = await _authenticationService.Login(request);
+            if (result.Error != null)
+            {
+                return Unauthorized($"{result}");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("Register")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BaseResponse<LoginResponse>>> Register([FromBody] RegisterRequest request)
+        {
+            var result = await _authenticationService.Register(request);
             if (result.Error != null)
             {
                 return Unauthorized($"{result}");
