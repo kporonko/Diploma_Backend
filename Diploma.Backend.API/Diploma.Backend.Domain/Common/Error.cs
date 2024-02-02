@@ -9,6 +9,6 @@ namespace Diploma.Backend.Domain.Common
 {
     public class Error
     {
-        public ErrorCodes Message { get; set; }
+        public string Message { get; set; }
     }
 }

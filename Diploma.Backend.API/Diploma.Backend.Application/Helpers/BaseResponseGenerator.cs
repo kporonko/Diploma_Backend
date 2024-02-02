@@ -11,13 +11,13 @@ namespace Diploma.Backend.Application.Helpers
 {
     public static class BaseResponseGenerator
     {
-        public static BaseResponse<T> GenerateBaseResponseByErrorMessage<T>(ErrorCodes errorCode)
+        public static BaseResponse<T> GenerateBaseResponseByErrorMessage<T>(string errorMessage)
         {
             return new BaseResponse<T>
             {
                 Error = new Error
                 {
-                    Message = errorCode
+                    Message = errorMessage
                 }
             };
         }

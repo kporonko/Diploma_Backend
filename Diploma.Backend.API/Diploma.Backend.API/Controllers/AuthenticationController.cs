@@ -29,7 +29,7 @@ namespace Diploma.Backend.API.Controllers
             var result = await _authenticationService.Login(request);
             if (result.Error != null)
             {
-                return Unauthorized($"{result}");
+                return Unauthorized(result);
             }
 
             return Ok(result);

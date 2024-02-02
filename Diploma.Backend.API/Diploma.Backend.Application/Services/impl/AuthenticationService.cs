@@ -9,12 +9,6 @@ using Diploma.Backend.Domain.Models;
 using Diploma.Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diploma.Backend.Application.Services.impl
 {
@@ -44,7 +38,7 @@ namespace Diploma.Backend.Application.Services.impl
             bool isEmailExists = await IsEmailExists(registerRequest.Email);
             
             if (isEmailExists)
-                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<LoginResponse>(ErrorCodes.ExistingEmailException);
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<LoginResponse>(ErrorCodes.ExistingEmailException.ToString());
             
             User user = RegisterMapper.ConvertRegisterToUser(registerRequest);
             await AddUserToDb(user);
@@ -74,8 +68,8 @@ namespace Diploma.Backend.Application.Services.impl
             if (!isPasswordMatch)
             {
                 return user is null ? 
-                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidEmailException) :
-                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidPasswordException);
+                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.UnexistingEmailException.ToString()) :
+                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidPasswordException.ToString());
             }
 
             return BaseResponseGenerator.GenerateValidBaseResponseByUser<User>(user);
