@@ -16,5 +16,9 @@ namespace Diploma.Backend.Domain.Models
 
         public List<SurveyUnit> SurveyUnits { get; set; } = new List<SurveyUnit>();
 
+
+        public int UserId { get; set; }
+        public User User { get; set; }
+
     }
 }

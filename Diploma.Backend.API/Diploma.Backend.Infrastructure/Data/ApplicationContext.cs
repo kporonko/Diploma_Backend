@@ -148,10 +148,34 @@ namespace Diploma.Backend.Infrastructure.Data
                 
             modelBuilder.Entity<Template>()
                 .HasKey(k => k.Id);
-            
-            
 
 
+            // Add user relationships to all needed entities
+
+            modelBuilder.Entity<Targeting>()
+                .HasOne(u => u.User)
+                .WithMany(s => s.Targetings)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<SurveyUnit>()
+                .HasOne(u => u.User)
+                .WithMany(s => s.SurveyUnits)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<UnitAppearance>()
+                .HasOne(u => u.User)
+                .WithMany(s => s.UnitAppearances)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<UnitSettings>()
+                .HasOne(u => u.User)
+                .WithMany(s => s.UnitSettings)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
