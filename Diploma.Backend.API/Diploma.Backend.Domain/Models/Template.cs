@@ -11,6 +11,7 @@ namespace Diploma.Backend.Domain.Models
     {
         public string TemplateCode { get; set; }
         public string DefaultParams { get; set; }
+        public string Name { get; set; }
 
         public List<UnitAppearance> UnitAppearances { get; set; } = new List<UnitAppearance>();
     }
