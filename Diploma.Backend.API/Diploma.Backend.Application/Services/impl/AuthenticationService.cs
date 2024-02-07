@@ -78,7 +78,7 @@ namespace Diploma.Backend.Application.Services.impl
         {
             var token = UserExtensions.GenerateTokenFromUser(user, _config["Jwt:Key"], _config["Jwt:Issuer"], _config["Jwt:Audience"]);
             LoginResponse loginResponse = LoginMapper.CreateTokenResponse(token);
-            return BaseResponseGenerator.GenerateValidBaseResponseByUser<LoginResponse>(loginResponse);
+            return BaseResponseGenerator.GenerateValidBaseResponse<LoginResponse>(loginResponse);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Diploma.Backend.Application.Services.impl
                      BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidPasswordException.ToString());
             }
 
-            return BaseResponseGenerator.GenerateValidBaseResponseByUser<User>(user);
+            return BaseResponseGenerator.GenerateValidBaseResponse<User>(user);
         }
 
         /// <summary>

@@ -1,11 +1,4 @@
 ﻿using Diploma.Backend.Domain.Common;
-using Diploma.Backend.Domain.Enums;
-using Diploma.Backend.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diploma.Backend.Application.Helpers
 {
@@ -22,7 +15,7 @@ namespace Diploma.Backend.Application.Helpers
             };
         }
 
-        public static BaseResponse<T> GenerateValidBaseResponseByUser<T>(T value)
+        public static BaseResponse<T> GenerateValidBaseResponse<T>(T value)
         {
             return new BaseResponse<T>
             {
