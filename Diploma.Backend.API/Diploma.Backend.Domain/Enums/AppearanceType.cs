@@ -8,5 +8,6 @@ namespace Diploma.Backend.Domain.Enums
 {
     public enum AppearanceType
     {
+        TestType
     }
 }
