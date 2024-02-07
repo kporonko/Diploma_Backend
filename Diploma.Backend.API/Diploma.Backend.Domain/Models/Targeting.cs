@@ -12,5 +12,7 @@ namespace Diploma.Backend.Domain.Models
         public string Name { get; set; }
         public List<CountryInTargeting> CountryInTargetings { get; set; } = new List<CountryInTargeting>();
         public List<Survey> Surveys { get; set; } = new List<Survey>();
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

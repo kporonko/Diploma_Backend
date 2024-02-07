@@ -17,5 +17,9 @@ namespace Diploma.Backend.Domain.Models
         public int TemplateId { get; set; }
         public Template Template { get; set; }
 
+
+        public int UserId { get; set; }
+        public User User { get; set; }
+
     }
 }
