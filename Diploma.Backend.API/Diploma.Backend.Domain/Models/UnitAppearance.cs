@@ -12,6 +12,7 @@ namespace Diploma.Backend.Domain.Models
     {
         public AppearanceType Type { get; set; }
         public string Params { get; set; }
+        public bool State { get; set; }
 
         public List<SurveyUnit> SurveyUnits { get; set; } = new List<SurveyUnit>();
         public int TemplateId { get; set; }
