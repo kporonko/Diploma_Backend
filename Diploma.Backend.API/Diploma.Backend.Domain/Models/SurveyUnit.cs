@@ -10,7 +10,6 @@ namespace Diploma.Backend.Domain.Models
     public class SurveyUnit : BaseEntity
     {
         public string Name { get; set; }
-        public int SettingsId { get; set; }
         public UnitSettings UnitSettings { get; set; }
         public int AppearanceId { get; set; }
         public UnitAppearance UnitAppearance { get; set; }

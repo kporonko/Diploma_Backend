@@ -14,7 +14,8 @@ namespace Diploma.Backend.Domain.Models
         public bool HideAfterNoSurveys { get; set; }
         public bool MessageAfterNoSurveys { get; set; }
 
-        public List<SurveyUnit> SurveyUnits { get; set; } = new List<SurveyUnit>();
+        public int SurveyUnitId { get; set; }
+        public SurveyUnit SurveyUnit { get; set; }
 
 
         public int UserId { get; set; }
