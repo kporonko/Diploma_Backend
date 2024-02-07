@@ -11,5 +11,6 @@ namespace Diploma.Backend.Domain.Enums
         InvalidPasswordException,
         UnexistingEmailException,
         ExistingEmailException,
+        ApiCommunicationError
     }
 }

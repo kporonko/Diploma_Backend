@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Diploma.Backend.Application.Dto.Response
+{
+    public class TemplateResponse
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string TemplateCode { get; set; }
+        public string DefaultParams { get; set; }
+    }
+}
