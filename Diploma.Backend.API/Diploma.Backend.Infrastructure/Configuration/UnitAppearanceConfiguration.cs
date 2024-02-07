@@ -32,6 +32,11 @@ namespace Diploma.Backend.Infrastructure.Configuration
                 .IsRequired()
                 .HasColumnName("Params")
                 .HasColumnType("varchar(max)");
+            builder
+                .Property(t => t.State)
+                .IsRequired()
+                .HasColumnName("State")
+                .HasColumnType("bit");
         }
     }
 }
