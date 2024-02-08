@@ -1,4 +1,5 @@
-﻿using Diploma.Backend.Application.Dto.Response;
+﻿using Diploma.Backend.Application.Dto.Request;
+using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Application.Helpers;
 using Diploma.Backend.Application.Services;
 using Diploma.Backend.Domain.Common;
@@ -39,6 +40,48 @@ namespace Diploma.Backend.API.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("UnitAppearance")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult<BaseResponse<UnitAppearanceResponse>>> CreateUnitAppearance([FromBody] UnitAppearanceCreateRequest request)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = CurrentUserRetriever.GetCurrentUser(identity);
+            if (user.Error != null)
+            {
+                return Unauthorized(user);
+            }
+
+            var result = await _unitAppearanceService.CreateUnitAppearance(user.Data, request);
+            if (result.Error != null)
+            {
+                return BadRequest(result);
+            }
+
+            return Created(HttpContext.GetEndpoint().DisplayName, result);
+        }
+
+        [HttpPatch]
+        [Route("UnitAppearance")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult<BaseResponse<UnitAppearanceResponse>>> EditUnitAppearance([FromBody] UnitAppearanceCreateRequest request)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = CurrentUserRetriever.GetCurrentUser(identity);
+            if (user.Error != null)
+            {
+                return Unauthorized(user);
+            }
+
+            var result = await _unitAppearanceService.EditUnitAppearance(user.Data, request);
+            if (result.Error != null)
+            {
+                return BadRequest(result);
+            }
+
+            return Created(HttpContext.GetEndpoint().DisplayName, result);
         }
     }
 }
