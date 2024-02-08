@@ -13,6 +13,8 @@ namespace Diploma.Backend.Domain.Enums
         ExistingEmailException,
         ApiCommunicationError,
         UserNotFound,
-        InvalidUserClaims
+        InvalidUserClaims,
+        TemplateNotFound,
+        UnitAppearanceNotFound
     }
 }
