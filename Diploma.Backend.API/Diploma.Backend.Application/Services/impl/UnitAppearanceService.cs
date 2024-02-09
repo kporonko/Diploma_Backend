@@ -28,7 +28,12 @@ namespace Diploma.Backend.Application.Services.impl
             _config = config;
         }
 
-        public async Task<Domain.Common.BaseResponse<List<UnitAppearanceResponse>>> GetUnitAppearances(User userJwt)
+        /// <summary>
+        /// Gets all user`s unit appearances from User entity.
+        /// </summary>
+        /// <param name="userJwt">User model taken from api token whose unit appearance to retrieve.</param>
+        /// <returns>BaseResponse filled with Data if everythings fine. Filled with Error if there was an error.</returns>
+        public async Task<BaseResponse<List<UnitAppearanceResponse>>> GetUnitAppearances(User userJwt)
         {
             try
             {
@@ -47,8 +52,14 @@ namespace Diploma.Backend.Application.Services.impl
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<List<UnitAppearanceResponse>>(ex.Message);
             }        
         }
-        
-        public async Task<Domain.Common.BaseResponse<UnitAppearanceResponse>> CreateUnitAppearance(User userJwt, UnitAppearanceCreateRequest unitAppearanceRequest)
+
+        /// <summary>
+        /// Creates UnitAppearance entity from User model and UnitAppearanceRequest.
+        /// </summary>
+        /// <param name="userJwt">User model taken from api token.</param>
+        /// <param name="unitAppearanceRequest">UnitAppearance request.</param>
+        /// <returns>BaseResponse filled with Data if everythings fine. Filled with Error if there was an error.</returns>
+        public async Task<BaseResponse<UnitAppearanceResponse>> CreateUnitAppearance(User userJwt, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             try
             {
@@ -72,6 +83,12 @@ namespace Diploma.Backend.Application.Services.impl
             }
         }
 
+        /// <summary>
+        /// Updates UnitAppearance entity from User model and UnitAppearanceRequest.
+        /// </summary>
+        /// <param name="userJwt">User model taken from api token.</param>
+        /// <param name="unitAppearanceRequest">UnitAppearance request with Id.</param>
+        /// <returns>BaseResponse filled with Data if everythings fine. Filled with Error if there was an error.</returns>
         public async Task<BaseResponse<UnitAppearanceResponse>> EditUnitAppearance(User userJwt, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             try
@@ -98,6 +115,13 @@ namespace Diploma.Backend.Application.Services.impl
             }
         }
 
+        /// <summary>
+        /// Updates UnitAppearance entity with new data from User, Template entities and UnitAppearanceRequest model.
+        /// </summary>
+        /// <param name="unitAppearance">UnitAppearance to update.</param>
+        /// <param name="user">User model whose UA is being changed.</param>
+        /// <param name="template">Template of UA.</param>
+        /// <param name="unitAppearanceRequest">UnitAppearanceCreate request filled with new actual data.</param>
         private void ChangeUnitAppearanceModelData(ref UnitAppearance unitAppearance, User user, Template template, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             unitAppearance.Name = unitAppearanceRequest.Name;
@@ -110,12 +134,23 @@ namespace Diploma.Backend.Application.Services.impl
             unitAppearance.Type = Enum.Parse<AppearanceType>(unitAppearanceRequest.Type);
         }
 
+        /// <summary>
+        /// Saves UnitAppearance model to database.
+        /// </summary>
+        /// <param name="model">UnitAppearance model to save.</param>
         private async Task SaveUnitAppearanceModel(UnitAppearance model)
         {
             _context.UnitAppearances.Add(model);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Fills UnitAppearance model with values from User, Template and UnitAppearanceCreateRequest.
+        /// </summary>
+        /// <param name="user">User whose UA is being created.</param>
+        /// <param name="template">Template that is used for UA creation.</param>
+        /// <param name="unitAppearanceRequest">UnitAppearanceCreateRequest filled with data of UA to create.</param>
+        /// <returns>UnitAppearance model ready for saving.</returns>
         private UnitAppearance FillUnitAppearanceModel(User user, Template template, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             return new UnitAppearance
@@ -131,6 +166,11 @@ namespace Diploma.Backend.Application.Services.impl
             };
         }
 
+        /// <summary>
+        /// Fills list of UA to list of UnitAppearanceResponse.
+        /// </summary>
+        /// <param name="unitAppearances">UA list to convert to response.</param>
+        /// <returns>List of UnitAppearanceResponse.</returns>
         private List<UnitAppearanceResponse> FillUnitAppearanceResponseList(List<UnitAppearance> unitAppearances)
         {
             List<UnitAppearanceResponse> resList = new List<UnitAppearanceResponse>();

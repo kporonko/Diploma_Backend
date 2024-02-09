@@ -10,6 +10,11 @@ namespace Diploma.Backend.Application.Mappers
 {
     public static class TemplateMapper
     {
+        /// <summary>
+        /// Maps the template to template response.
+        /// </summary>
+        /// <param name="t">Template object to map.</param>
+        /// <returns>TemplateResponse object.</returns>
         public static TemplateResponse MapTemplateToResponse(Template t)
         {
             return new TemplateResponse
