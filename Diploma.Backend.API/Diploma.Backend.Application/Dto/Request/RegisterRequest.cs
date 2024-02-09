@@ -13,6 +13,7 @@ namespace Diploma.Backend.Application.Dto.Request
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
         [StringLength(50, MinimumLength = 8, ErrorMessage = "Password must contain at least 8 symbols.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

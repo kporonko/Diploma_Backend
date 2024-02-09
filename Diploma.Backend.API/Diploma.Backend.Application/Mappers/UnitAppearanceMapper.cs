@@ -10,6 +10,11 @@ namespace Diploma.Backend.Application.Mappers
 {
     public static class UnitAppearanceMapper
     {
+        /// <summary>
+        /// Maps the unit appearance to response.
+        /// </summary>
+        /// <param name="ua">UnitAppearance model to map.</param>
+        /// <returns>Filled UnitAppearanceResponse.</returns>
         public static UnitAppearanceResponse MapUnitAppearanceToResponse(UnitAppearance ua)
         {
             return new UnitAppearanceResponse
