@@ -16,7 +16,8 @@ namespace Diploma.Backend.Application.Helpers
         /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="claimsIdentity">Claims identity object from HttpContext.User of the Http request.</param>
+        /// <returns>BaseResponse object of User entity.</returns>
         public static BaseResponse<User> GetCurrentUser(ClaimsIdentity claimsIdentity)
         {
             try
