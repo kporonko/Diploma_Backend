@@ -4,6 +4,7 @@ using Diploma.Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diploma.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240205171412_UserRelationshipsToAllNeededEntities")]
+    partial class UserRelationshipsToAllNeededEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,12 +224,17 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .HasColumnType("varchar(max)")
                         .HasColumnName("Name");
 
+                    b.Property<int>("SettingsId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppearanceId");
+
+                    b.HasIndex("SettingsId");
 
                     b.HasIndex("UserId");
 
@@ -271,11 +279,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .HasColumnType("varchar(max)")
                         .HasColumnName("DefaultParams");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("Name");
-
                     b.Property<string>("TemplateCode")
                         .IsRequired()
                         .HasColumnType("varchar(max)")
@@ -295,19 +298,10 @@ namespace Diploma.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("Name");
-
                     b.Property<string>("Params")
                         .IsRequired()
                         .HasColumnType("varchar(max)")
                         .HasColumnName("Params");
-
-                    b.Property<bool>("State")
-                        .HasColumnType("bit")
-                        .HasColumnName("State");
 
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
@@ -354,16 +348,10 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("OneSurveyTakePerDevice");
 
-                    b.Property<int>("SurveyUnitId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SurveyUnitId")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -506,12 +494,20 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Diploma.Backend.Domain.Models.UnitSettings", "UnitSettings")
+                        .WithMany("SurveyUnits")
+                        .HasForeignKey("SettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Diploma.Backend.Domain.Models.User", "User")
                         .WithMany("SurveyUnits")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("UnitAppearance");
+
+                    b.Navigation("UnitSettings");
 
                     b.Navigation("User");
                 });
@@ -546,18 +542,10 @@ namespace Diploma.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.UnitSettings", b =>
                 {
-                    b.HasOne("Diploma.Backend.Domain.Models.SurveyUnit", "SurveyUnit")
-                        .WithOne("UnitSettings")
-                        .HasForeignKey("Diploma.Backend.Domain.Models.UnitSettings", "SurveyUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Diploma.Backend.Domain.Models.User", "User")
                         .WithMany("UnitSettings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("SurveyUnit");
 
                     b.Navigation("User");
                 });
@@ -587,9 +575,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
             modelBuilder.Entity("Diploma.Backend.Domain.Models.SurveyUnit", b =>
                 {
                     b.Navigation("SurveyInUnits");
-
-                    b.Navigation("UnitSettings")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.Targeting", b =>
@@ -605,6 +590,11 @@ namespace Diploma.Backend.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.UnitAppearance", b =>
+                {
+                    b.Navigation("SurveyUnits");
+                });
+
+            modelBuilder.Entity("Diploma.Backend.Domain.Models.UnitSettings", b =>
                 {
                     b.Navigation("SurveyUnits");
                 });
