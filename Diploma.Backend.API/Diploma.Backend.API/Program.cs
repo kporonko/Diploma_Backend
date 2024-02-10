@@ -15,6 +15,7 @@ string? connection = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<IUnitAppearanceService, UnitAppearanceService>();
 builder.Services.AddTransient<ITemplateService, TemplateService>();
+builder.Services.AddTransient<ITargetingService, TargetingService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
