@@ -15,6 +15,7 @@ namespace Diploma.Backend.Domain.Enums
         UserNotFound,
         InvalidUserClaims,
         TemplateNotFound,
-        UnitAppearanceNotFound
+        UnitAppearanceNotFound,
+        TargetingNotFound
     }
 }
