@@ -1,4 +1,5 @@
-﻿using Diploma.Backend.Application.Dto.Response;
+﻿using Diploma.Backend.Application.Dto.Request;
+using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,16 @@ namespace Diploma.Backend.Application.Mappers
                 Name = t.Name,
                 TemplateCode = t.TemplateCode,
                 DefaultParams = t.DefaultParams
+            };
+        }
+
+        public static Template ConvertTemplateCreateRequestToTemplate(TemplateCreateRequest request)
+        {
+            return new Template
+            {
+                Name = request.Name,
+                TemplateCode = request.TemplateCode,
+                DefaultParams = request.DefaultParams,
             };
         }
     }

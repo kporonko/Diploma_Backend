@@ -11,10 +11,11 @@ namespace Diploma.Backend.Domain.Models
     public class Question : BaseEntity
     {
         public QuestionType Type { get; set; }
-        public string QuestionLine { get; set; }
+        public int OrderNumber { get; set; }
         
         public int SurveyId { get; set; }
         public Survey Survey { get; set; }
         public List<QuestionOption> QuestionOptions { get; set; } = new List<QuestionOption>();
+        public QuestionLine QuestionLine { get; set; }
     }
 }
