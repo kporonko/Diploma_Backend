@@ -14,7 +14,7 @@ namespace Diploma.Backend.Application.Services
     {
         Task<BaseResponse<List<TemplateResponse>>> GetTemplates();
         Task<BaseResponse<TemplateResponse>> EditTemplate(TemplateEditRequest templateEditRequest);
-        Task<BaseResponse<TemplateResponse>> DeleteTemplate(TemplateDeleteRequest templateEditRequest);
+        Task<BaseResponse<string>> DeleteTemplate(TemplateDeleteRequest templateEditRequest);
         Task<BaseResponse<TemplateResponse>> CreateTemplate(TemplateCreateRequest request);
     }
 }
