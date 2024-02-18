@@ -22,6 +22,11 @@ namespace Diploma.Backend.Infrastructure.Configuration
                 .HasColumnName("Id")
                 .HasColumnType("int")
                 .ValueGeneratedOnAdd();
+            builder
+                .Property(t => t.OrderNumber)
+                .IsRequired()
+                .HasColumnName("OrderNumber")
+                .HasColumnType("int");
         }
     }
 }

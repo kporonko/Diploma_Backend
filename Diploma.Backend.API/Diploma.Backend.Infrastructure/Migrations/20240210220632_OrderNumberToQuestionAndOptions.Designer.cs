@@ -4,6 +4,7 @@ using Diploma.Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diploma.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240210220632_OrderNumberToQuestionAndOptions")]
+    partial class OrderNumberToQuestionAndOptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,6 +110,11 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("OrderNumber");
 
+                    b.Property<string>("QuestionLine")
+                        .IsRequired()
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("QuestionLine");
+
                     b.Property<int>("SurveyId")
                         .HasColumnType("int");
 
@@ -120,26 +128,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
                     b.HasIndex("SurveyId");
 
                     b.ToTable("Question", (string)null);
-                });
-
-            modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionLine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId")
-                        .IsUnique();
-
-                    b.ToTable("QuestionLine", (string)null);
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionOption", b =>
@@ -163,32 +151,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("QuestionOption", (string)null);
-                });
-
-            modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionTranslation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QuestionLineId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionTranslationLine")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionLineId");
-
-                    b.ToTable("QuestionTranslation");
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.Survey", b =>
@@ -499,17 +461,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
                     b.Navigation("Survey");
                 });
 
-            modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionLine", b =>
-                {
-                    b.HasOne("Diploma.Backend.Domain.Models.Question", "Question")
-                        .WithOne("QuestionLine")
-                        .HasForeignKey("Diploma.Backend.Domain.Models.QuestionLine", "QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionOption", b =>
                 {
                     b.HasOne("Diploma.Backend.Domain.Models.Question", "Question")
@@ -519,17 +470,6 @@ namespace Diploma.Backend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionTranslation", b =>
-                {
-                    b.HasOne("Diploma.Backend.Domain.Models.QuestionLine", "QuestionLine")
-                        .WithMany("QuestionTranslations")
-                        .HasForeignKey("QuestionLineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("QuestionLine");
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.Survey", b =>
@@ -640,15 +580,7 @@ namespace Diploma.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.Question", b =>
                 {
-                    b.Navigation("QuestionLine")
-                        .IsRequired();
-
                     b.Navigation("QuestionOptions");
-                });
-
-            modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionLine", b =>
-                {
-                    b.Navigation("QuestionTranslations");
                 });
 
             modelBuilder.Entity("Diploma.Backend.Domain.Models.QuestionOption", b =>
