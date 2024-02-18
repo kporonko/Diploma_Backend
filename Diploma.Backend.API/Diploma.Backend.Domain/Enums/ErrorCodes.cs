@@ -16,6 +16,8 @@ namespace Diploma.Backend.Domain.Enums
         InvalidUserClaims,
         TemplateNotFound,
         UnitAppearanceNotFound,
-        TargetingNotFound
+        TargetingNotFound,
+        SurveyNotFound,
+        SurveyUnitNotFound
     }
 }

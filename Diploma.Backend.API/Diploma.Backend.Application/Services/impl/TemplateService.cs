@@ -34,15 +34,15 @@ namespace Diploma.Backend.Application.Services.impl
             await AddTemplateToDb(response);
             return BaseResponseGenerator.GenerateValidBaseResponse(TemplateMapper.MapTemplateToResponse(response));
         }
-
-        public async Task<BaseResponse<TemplateResponse>> DeleteTemplate(TemplateDeleteRequest templateDeleteRequest)
+        
+        public async Task<BaseResponse<string>> DeleteTemplate(TemplateDeleteRequest templateDeleteRequest)
         {
             var response = await _context.Templates.FirstOrDefaultAsync(x => x.Id == templateDeleteRequest.Id);
             if (response == null)
                 BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TemplateResponse>(ErrorCodes.TemplateNotFound.ToString());
             
             await RemoveTemplateFromDb(response);
-            return BaseResponseGenerator.GenerateValidBaseResponse(TemplateMapper.MapTemplateToResponse(response));
+            return BaseResponseGenerator.GenerateValidBaseResponse("Template deleted");
         }
         
         public async Task<BaseResponse<TemplateResponse>> EditTemplate(TemplateEditRequest templateEditRequest)
