@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Diploma.Backend.Domain.Models
 {
-    public class QuestionOption : BaseEntity
+    public class QuestionLine : BaseEntity
     {
         public int QuestionId { get; set; }
         public Question Question { get; set; }
-        public int OrderNumber { get; set; }
-
-        public List<OptionTranslation> OptionTranslations { get; set; } = new List<OptionTranslation>();
+        public List<QuestionTranslation> QuestionTranslations { get; set; } = new List<QuestionTranslation>();
     }
 }
