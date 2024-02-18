@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diploma.Backend.Domain.Enums
+namespace Diploma.Backend.Application.Dto.Request
 {
-    public enum QuestionType
+    public class TemplateDeleteRequest
     {
-        QuestionType1
+        public int Id { get; set; }
     }
 }

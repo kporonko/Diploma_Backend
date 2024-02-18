@@ -30,6 +30,7 @@ namespace Diploma.Backend.Infrastructure.Data
         public DbSet<UnitSettings> UnitSettings { get; set; }
         public DbSet<UnitAppearance> UnitAppearances { get; set; }
         public DbSet<Template> Templates { get; set; }
+        public DbSet<QuestionLine> QuestionLines { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,7 @@ namespace Diploma.Backend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new UnitSettingsConfiguration());
             modelBuilder.ApplyConfiguration(new UnitAppearanceConfiguration());
             modelBuilder.ApplyConfiguration(new TemplateConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionLineConfiguration());
 
             modelBuilder.Entity<User>()
                 .HasKey(k => k.Id);
@@ -75,6 +77,15 @@ namespace Diploma.Backend.Infrastructure.Data
                 .HasOne(s => s.Survey)
                 .WithMany(q => q.Questions)
                 .HasForeignKey(s => s.SurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<QuestionLine>()
+                .HasKey(k => k.Id);
+
+            modelBuilder.Entity<Question>()
+                .HasOne(s => s.QuestionLine)
+                .WithOne(q => q.Question)
+                .HasForeignKey<QuestionLine>(s => s.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuestionOption>()

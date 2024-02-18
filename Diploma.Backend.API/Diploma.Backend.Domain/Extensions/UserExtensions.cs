@@ -38,7 +38,7 @@ namespace Diploma.Backend.Domain.Extensions
                 issuer,
                 audience,
                 claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(30000),
                 signingCredentials: credentials
                 );
 

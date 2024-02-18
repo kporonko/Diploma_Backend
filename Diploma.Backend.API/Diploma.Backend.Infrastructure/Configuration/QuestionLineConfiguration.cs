@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Diploma.Backend.Infrastructure.Configuration
 {
-    public class QuestionConfiguration : IEntityTypeConfiguration<Question>
+    public class QuestionLineConfiguration : IEntityTypeConfiguration<QuestionLine>
     {
-        public void Configure(EntityTypeBuilder<Question> builder)
+        public void Configure(EntityTypeBuilder<QuestionLine> builder)
         {
             builder
-                .ToTable(nameof(Question))
+                .ToTable(nameof(QuestionLine))
                 .HasKey(t => t.Id);
             builder
                 .Property(t => t.Id)
@@ -22,16 +22,6 @@ namespace Diploma.Backend.Infrastructure.Configuration
                 .HasColumnName("Id")
                 .HasColumnType("int")
                 .ValueGeneratedOnAdd();
-            builder
-                .Property(t => t.Type)
-                .IsRequired()
-                .HasColumnName("Type")
-                .HasColumnType("varchar(max)");
-            builder
-                .Property(t => t.OrderNumber)
-                .IsRequired()
-                .HasColumnName("OrderNumber")
-                .HasColumnType("int");
         }
     }
 }
