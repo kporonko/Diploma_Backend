@@ -18,6 +18,7 @@ builder.Services.AddTransient<IUnitAppearanceService, UnitAppearanceService>();
 builder.Services.AddTransient<ITemplateService, TemplateService>();
 builder.Services.AddTransient<ITargetingService, TargetingService>();
 builder.Services.AddTransient<ISurveyService, SurveyService>();
+builder.Services.AddTransient<ISurveyUnitService, SurveyUnitService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
