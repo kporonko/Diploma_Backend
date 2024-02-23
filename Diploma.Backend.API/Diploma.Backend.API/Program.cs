@@ -37,7 +37,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000", "http://localhost:3001") // Replace with your frontend application URL
+                          builder.WithOrigins("http://localhost:3000") // Replace with your frontend application URL
                                  .AllowAnyHeader()
                                  .AllowAnyMethod()
                                  .AllowCredentials();
@@ -73,6 +73,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
