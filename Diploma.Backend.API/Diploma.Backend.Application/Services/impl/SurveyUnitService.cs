@@ -143,7 +143,7 @@ namespace Diploma.Backend.Application.Services.impl
 
         private async Task DeleteSurveyInUnits(List<int> surveyIdsToDelete, int surveyUnitId)
         {
-            var rangeToDelete = _context.SurveysInUnits.Where(x => surveyIdsToDelete.Contains(x.SurveyId) && x.SurveyUnitId == surveyUnitId).ToList();
+            var rangeToDelete = await _context.SurveysInUnits.Where(x => surveyIdsToDelete.Contains(x.SurveyId) && x.SurveyUnitId == surveyUnitId).ToListAsync();
             _context.SurveysInUnits.RemoveRange(rangeToDelete);
         }
 
