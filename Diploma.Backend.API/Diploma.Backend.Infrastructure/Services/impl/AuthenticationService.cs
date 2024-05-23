@@ -2,6 +2,7 @@
 using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Application.Helpers;
 using Diploma.Backend.Application.Mappers;
+using Diploma.Backend.Application.Services;
 using Diploma.Backend.Domain.Common;
 using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Extensions;
@@ -10,7 +11,7 @@ using Diploma.Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Diploma.Backend.Application.Services.impl
+namespace Diploma.Backend.Infrastructure.Services.impl
 {
     /// <summary>
     /// Service for authentication

@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Diploma.Backend.Application.Dto.Request;
+﻿using Diploma.Backend.Application.Dto.Request;
 using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Domain.Common;
 using Diploma.Backend.Domain.Models;
