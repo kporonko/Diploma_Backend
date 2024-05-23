@@ -2,6 +2,7 @@
 using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Application.Helpers;
 using Diploma.Backend.Application.Mappers;
+using Diploma.Backend.Application.Services;
 using Diploma.Backend.Domain.Common;
 using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Models;
@@ -14,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diploma.Backend.Application.Services.impl
+namespace Diploma.Backend.Infrastructure.Services.impl
 {
     public class SurveyUnitService : ISurveyUnitService
     {
