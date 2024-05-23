@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Diploma.Backend.Domain\Diploma.Backend.Domain.csproj" />
-    <ProjectReference Include="..\Diploma.Backend.Infrastructure\Diploma.Backend.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
