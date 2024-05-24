@@ -1,4 +1,5 @@
-﻿using Diploma.Backend.Domain.Models;
+﻿using Diploma.Backend.Domain.Enums;
+using Diploma.Backend.Domain.Models;
 using Diploma.Backend.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +54,13 @@ namespace Diploma.Backend.Infrastructure.Data
                 .HasKey(k => k.Id);
 
 
+            modelBuilder.Entity<Question>()
+                .Property(q => q.Type)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (QuestionType)Enum.Parse(typeof(QuestionType), v)
+                );
+            
             modelBuilder.Entity<Survey>()
                 .HasKey(k => k.Id);
             modelBuilder.Entity<Survey>()
