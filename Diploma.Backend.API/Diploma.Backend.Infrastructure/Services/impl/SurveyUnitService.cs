@@ -96,6 +96,24 @@ namespace Diploma.Backend.Infrastructure.Services.impl
             return BaseResponseGenerator.GenerateValidBaseResponse(listResponses);
         }
 
+        public async Task<BaseResponse<SurveyUnit>> GetSurveyUnit(User data, int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == data.Id);
+            if (user == null)
+                BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnit>(ErrorCodes.UserNotFound.ToString());
+
+            await _context.Entry(user!).Collection(x => x.SurveyUnits).Query()
+                .Include(x => x.SurveyInUnits).Include(x => x.UnitAppearance).Include(x => x.UnitSettings)
+                .LoadAsync();
+
+            var unit = user.SurveyUnits.FirstOrDefault(x => x.Id == id);
+
+            if (unit == null)
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnit>(ErrorCodes.SurveyUnitNotFound.ToString());
+            
+            return BaseResponseGenerator.GenerateValidBaseResponse(unit);
+        }
+        
         private async Task<SurveyUnitResponse> EditSurveyUnitModel(SurveyUnitEditRequest surveyUnitCreateRequest, SurveyUnit surveyUnit)
         {
             surveyUnit.Name = surveyUnitCreateRequest.Name;
@@ -214,6 +232,5 @@ namespace Diploma.Backend.Infrastructure.Services.impl
             _context.SurveyUnits.Remove(surveyUnit);
             await _context.SaveChangesAsync();
         }
-
     }
 }
