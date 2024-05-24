@@ -113,6 +113,17 @@ namespace Diploma.Backend.Application.Mappers
             };
         }
 
+        public static SurveyShortResponse ConvertSurveyToSurveyShortResponse(Survey response)
+        {
+            return new SurveyShortResponse
+            {
+                Id = response.Id,
+                DateBy = response.DateBy,
+                Name = response.Name,
+                NumberOfQuestions = response.Questions.Count
+            };
+        }
+
         private static List<Question> ConvertQuestionListToResponseList(Survey response)
         {
             var resList = new List<Question>();

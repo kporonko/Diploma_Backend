@@ -13,5 +13,10 @@ namespace Diploma.Backend.Application.Services
     public interface ISurveyService
     {
         Task<BaseResponse<SurveyResponse>> CreateSurvey(User userJwt, SurveyCreateRequest surveyCreateRequest);
+        Task<BaseResponse<SurveyResponse>> EditSurvey(User userJwt, SurveyEditRequest surveyEditRequest);
+        Task<BaseResponse<string>> DeleteSurvey(User userJwt, SurveyDeleteRequest surveyDeleteRequest);
+        Task<BaseResponse<SurveyResponse>> GetSurveyById(User userJwt, int surveyId);
+        Task<BaseResponse<List<SurveyShortResponse>>> GetUserSurveys(User userJwt);
+
     }
 }
