@@ -118,7 +118,7 @@ namespace Diploma.Backend.API.Controllers
                 return Unauthorized(user);
             }
 
-            var result = await _surveyUnitService.GetSurveyUnit(user.Data);
+            var result = await _surveyUnitService.GetSurveyUnit(user.Data, id);
             if (result.Error != null)
             {
                 return BadRequest(result);
