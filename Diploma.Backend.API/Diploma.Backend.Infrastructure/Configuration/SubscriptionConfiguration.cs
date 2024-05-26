@@ -24,26 +24,16 @@ namespace Diploma.Backend.Infrastructure.Configuration
                 .Property(t => t.Name)
                 .HasColumnType("varchar(255)")
                 .HasColumnName(nameof(Subscription.Name))
-                .IsRequired();
+                .IsRequired(false);
             builder
                 .Property(t => t.IsActive)
                 .HasColumnType("bit")
                 .HasColumnName(nameof(Subscription.IsActive))
                 .IsRequired();
             builder
-                .Property(t => t.Price)
-                .HasColumnType("money")
-                .HasColumnName(nameof(Subscription.Price))
-                .IsRequired();
-            builder
                 .Property(t => t.DateChangeStatus)
                 .HasColumnType("datetime")
                 .HasColumnName(nameof(Subscription.DateChangeStatus))
-                .IsRequired();
-            builder
-                .Property(t => t.CurrencyCode)
-                .HasColumnType("varchar(255)")
-                .HasColumnName(nameof(Subscription.CurrencyCode))
                 .IsRequired();
             builder
                 .Property(t => t.DateCreate)
