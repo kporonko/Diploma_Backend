@@ -18,58 +18,86 @@ using System.Threading.Tasks;
 
 namespace Diploma.Backend.Infrastructure.PayPal.Services
 {
+    /// <summary>
+    /// Service for interacting with PayPal API.
+    /// </summary>
     public class PayPalService : IPayPalService
     {
         private readonly IPayPalFacade _payPalFacade;
         private readonly PayPalConfig _configuration;
         private readonly ApplicationContext _db;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalService"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration settings.</param>
+        /// <param name="payPalFacade">The PayPal facade.</param>
+        /// <param name="applicationContext">The application context.</param>
         public PayPalService(IConfiguration configuration, IPayPalFacade payPalFacade, ApplicationContext applicationContext)
         {
             _db = applicationContext;
             _configuration = new PayPalConfig(configuration);
             _payPalFacade = payPalFacade;
         }
-        public Task<PayPalAccessTokenResponse> GetToken()
-        {
-            PayPalAccessTokenResponse tokenResponse = _payPalFacade.Post<PayPalAccessTokenResponse>(
-                _configuration.TokenUrl,
-                new Dictionary<string, string>
-                {
-                    { "grant_type", "client_credentials" }
-                },
-                null,
-                new Dictionary<string, string>
-                {
-                    { "Authorization", $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_configuration.ClientId}:{_configuration.ClientSecret}"))}" }
-                },
-                "application/x-www-form-urlencoded"
-                );
 
-            return Task.FromResult(tokenResponse);
+        /// <summary>
+        /// Retrieves an access token from PayPal.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the access token response.</returns>
+        private async Task<PayPalAccessTokenResponse> GetTokenAsync()
+        {
+            var tokenAuthBasic = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_configuration.ClientId}:{_configuration.ClientSecret}"));
+            var tokenResponse = _payPalFacade.Post<PayPalAccessTokenResponse>(
+                _configuration.TokenUrl,
+                new Dictionary<string, string> { { "grant_type", "client_credentials" } },
+                null,
+                new Dictionary<string, string> { { "Authorization", $"Basic {tokenAuthBasic}" } },
+                "application/x-www-form-urlencoded"
+            );
+
+            return await Task.FromResult(tokenResponse);
         }
-        
+
+        /// <summary>
+        /// Cancels a subscription.
+        /// </summary>
+        /// <param name="id">The subscription ID.</param>
+        /// <param name="request">The cancellation request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with cancellation details.</returns>
         public async Task<BaseResponse<PayPalCancelSubscriptionResponse>> CancelSubscription(string id, PayPalCancelSubscriptionRequest request)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
+            var cancelSubscriptionUrl = _configuration.CancelSubscriptionUrl.Replace("{id}", id);
 
-            string cancelSubscriptionUrl = _configuration.CancelSubscriptionUrl.Replace("{id}", id);
-
-            PayPalCancelSubscriptionResponse cancelResponse = _payPalFacade.Post<PayPalCancelSubscriptionResponse>(
+            var cancelResponse = _payPalFacade.Post<PayPalCancelSubscriptionResponse>(
                 cancelSubscriptionUrl,
                 request,
                 null,
-                new Dictionary<string, string>
-                {
-                    { "Authorization", $"Bearer {token.access_token}" }
-                });
+                GetAuthHeader(token.access_token)
+            );
 
             return BaseResponseGenerator.GenerateValidBaseResponse(cancelResponse);
         }
 
+        /// <summary>
+        /// Generates the authorization header with the given token.
+        /// </summary>
+        /// <param name="token">The access token.</param>
+        /// <returns>The authorization header.</returns>
+        private Dictionary<string, string> GetAuthHeader(string token)
+        {
+            return new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+        }
+
+        /// <summary>
+        /// Creates a new subscription.
+        /// </summary>
+        /// <param name="request">The subscription request.</param>
+        /// <param name="jwtUser">The user initiating the request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with subscription details.</returns>
         public async Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequest request, User jwtUser)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
 
             PayPalSubscriptionResponse subscrResponse = _payPalFacade.Post<PayPalSubscriptionResponse>(
                 _configuration.CreateSubscriptionUrl,
@@ -98,9 +126,14 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Retrieves subscription details.
+        /// </summary>
+        /// <param name="id">The subscription ID.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with subscription details.</returns>
         public async Task<BaseResponse<PayPalSubscriptionResponse>> GetSubscription(string id)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
             var url = _configuration.GetSubscriptionUrl.Replace("{id}", id);
             PayPalSubscriptionResponse subscrResponse = _payPalFacade.Get<PayPalSubscriptionResponse>(
                 url,
@@ -114,9 +147,15 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Activates a subscription.
+        /// </summary>
+        /// <param name="id">The subscription ID.</param>
+        /// <param name="request">The activation request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with subscription details.</returns>
         public async Task<BaseResponse<PayPalSubscriptionResponse>> ActivateSubscription(string id, ActivateSubscriptionRequest request)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
             var url = _configuration.ActivateSubscriptionUrl.Replace("{id}", id);
             PayPalSubscriptionResponse subscrResponse = _payPalFacade.Post<PayPalSubscriptionResponse>(
                 url,
@@ -130,9 +169,14 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Creates a new PayPal plan.
+        /// </summary>
+        /// <param name="request">The plan creation request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with plan details.</returns>
         public async Task<BaseResponse<PayPalPlanResponse>> CreatePlan(PayPalPlanRequest request)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
             PayPalPlanResponse subscrResponse = _payPalFacade.Post<PayPalPlanResponse>(
                 $"{_configuration.CreatePlanUrl}",
                 request,
@@ -145,9 +189,15 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Captures a payment for a subscription.
+        /// </summary>
+        /// <param name="subscrId">The subscription ID.</param>
+        /// <param name="request">The payment request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with payment details.</returns>
         public async Task<BaseResponse<PayPalPaymentResponse>> CapturePayment(string subscrId, PayPalPaymentRequest request)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
             var url = _configuration.CapturePaymentUrl.Replace("{id}", subscrId);
             PayPalPaymentResponse subscrResponse = _payPalFacade.Post<PayPalPaymentResponse>(
                 url,
@@ -161,9 +211,14 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Creates a new PayPal product.
+        /// </summary>
+        /// <param name="request">The product creation request.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the base response with product details.</returns>
         public async Task<BaseResponse<PayPalProductResponse>> CreateProduct(PayPalProductRequest request)
         {
-            var token = await GetToken();
+            var token = await GetTokenAsync();
             PayPalProductResponse subscrResponse = _payPalFacade.Post<PayPalProductResponse>(
                 _configuration.CreateProductUrl,
                 request,
@@ -176,6 +231,11 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
         }
 
+        /// <summary>
+        /// Handles the activation of a subscription.
+        /// </summary>
+        /// <param name="id">The subscription ID.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task HandleActivation(string id)
         {
             var subscription = _db.Subscriptions.FirstOrDefault(s => s.SubscriptionId == id);
@@ -185,6 +245,11 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
             await _db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Handles the expiration of a subscription.
+        /// </summary>
+        /// <param name="id">The subscription ID.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task HandleExpiration(string id)
         {
             var subscription = _db.Subscriptions.FirstOrDefault(s => s.SubscriptionId == id);
