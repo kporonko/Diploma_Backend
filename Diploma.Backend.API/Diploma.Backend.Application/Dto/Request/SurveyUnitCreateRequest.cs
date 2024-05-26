@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace Diploma.Backend.Application.Dto.Request
         public int MaximumSurveysPerDevice { get; set; }
         public bool HideAfterNoSurveys { get; set; }
         public bool MessageAfterNoSurveys { get; set; }
-        public List<int> SurveyIds { get; set; }
         public int AppearanceId { get; set; }
     }
 }
