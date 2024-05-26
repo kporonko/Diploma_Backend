@@ -1,9 +1,13 @@
 using Diploma.Backend.Application.Services;
 using Diploma.Backend.Infrastructure.Data;
+using Diploma.Backend.Infrastructure.PayPal.Facades;
+using Diploma.Backend.Infrastructure.PayPal.Facades.impl;
+using Diploma.Backend.Infrastructure.PayPal.Services;
 using Diploma.Backend.Infrastructure.Services.impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RestSharp;
 using System.Text;
 using System.Text.Json.Serialization;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -19,6 +23,10 @@ builder.Services.AddTransient<ITemplateService, TemplateService>();
 builder.Services.AddTransient<ITargetingService, TargetingService>();
 builder.Services.AddTransient<ISurveyService, SurveyService>();
 builder.Services.AddTransient<ISurveyUnitService, SurveyUnitService>();
+builder.Services.AddTransient<IPayPalFacade, PayPalFacade>();
+builder.Services.AddTransient<IRestClient, RestClient>();
+builder.Services.AddTransient<IPayPalService, PayPalService>();
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
