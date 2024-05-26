@@ -13,9 +13,7 @@ namespace Diploma.Backend.Domain.Models
         public string Name { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateChangeStatus { get; set; }
-        public string CurrencyCode { get; set; }
         public bool IsActive { get; set; }
-        public decimal Price { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }
 

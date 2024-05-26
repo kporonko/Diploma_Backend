@@ -87,10 +87,8 @@ namespace Diploma.Backend.Infrastructure.PayPal.Services
                 User = user,
                 UserId = user.Id,
                 IsActive = false,
-                Price = Convert.ToInt64(subscrResponse.shipping_amount.value),
-                CurrencyCode = subscrResponse.shipping_amount.currency_code,
                 DateCreate = subscrResponse.create_time,
-                DateChangeStatus = subscrResponse.status_update_time,
+                DateChangeStatus = subscrResponse.status_update_time >= subscrResponse.create_time ? subscrResponse.status_update_time : subscrResponse.create_time,
                 SubscriptionId = subscrResponse.id,
             };
 
