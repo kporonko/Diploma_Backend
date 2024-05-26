@@ -12,7 +12,6 @@ namespace Diploma.Backend.Application.Services
 {
     public interface IPayPalService
     {
-        Task<PayPalAccessTokenResponse> GetToken();
         Task<BaseResponse<PayPalSubscriptionResponse>> GetSubscription(string id);
         Task<BaseResponse<PayPalPlanResponse>> CreatePlan(PayPalPlanRequest request);
         Task<BaseResponse<PayPalPaymentResponse>> CapturePayment(string subscrId, PayPalPaymentRequest request);
