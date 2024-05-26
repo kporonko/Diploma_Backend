@@ -26,7 +26,7 @@ builder.Services.AddTransient<ISurveyUnitService, SurveyUnitService>();
 builder.Services.AddTransient<IPayPalFacade, PayPalFacade>();
 builder.Services.AddTransient<IRestClient, RestClient>();
 builder.Services.AddTransient<IPayPalService, PayPalService>();
-
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
