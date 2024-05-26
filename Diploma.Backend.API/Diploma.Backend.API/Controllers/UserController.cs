@@ -13,6 +13,13 @@ namespace Diploma.Backend.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+        
         [HttpGet]
         [Route("User")]
         public async Task<ActionResult<BaseResponse<User>>> UserInfo()
@@ -24,7 +31,8 @@ namespace Diploma.Backend.API.Controllers
                 return Unauthorized(user);
             }
 
-            return Ok(user);
+            var result = await _userService.GetUserData(user.Data);
+            return Ok(result);
         }
     }
 }

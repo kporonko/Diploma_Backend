@@ -19,6 +19,7 @@ namespace Diploma.Backend.Infrastructure.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<Targeting> Targetings { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -36,6 +37,7 @@ namespace Diploma.Backend.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new TargetingConfiguration());
             modelBuilder.ApplyConfiguration(new SurveyConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
@@ -52,7 +54,12 @@ namespace Diploma.Backend.Infrastructure.Data
 
             modelBuilder.Entity<User>()
                 .HasKey(k => k.Id);
-
+            modelBuilder.Entity<Subscription>()
+                .HasKey(k => k.Id);
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.User)
+                .WithOne(u => u.Subscription)
+                .HasForeignKey<Subscription>(s => s.UserId);
 
             modelBuilder.Entity<Question>()
                 .Property(q => q.Type)
