@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Diploma.Backend.Infrastructure.Services.impl
@@ -126,7 +127,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
         private void ChangeUnitAppearanceModelData(ref UnitAppearance unitAppearance, User user, Template template, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             unitAppearance.Name = unitAppearanceRequest.Name;
-            unitAppearance.Params = unitAppearanceRequest.Params.ToString();
+            unitAppearance.Params = JsonSerializer.Serialize(unitAppearanceRequest.Params);
             unitAppearance.State = true;
             unitAppearance.Template = template;
             unitAppearance.TemplateId = template.Id;
@@ -157,7 +158,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
             return new UnitAppearance
             {
                 Name = unitAppearanceRequest.Name,
-                Params = unitAppearanceRequest.Params.ToString(),
+                Params = JsonSerializer.Serialize(unitAppearanceRequest.Params),
                 State = true,
                 Template = template,
                 TemplateId = template.Id,
@@ -183,6 +184,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
                     Name = unitAppearance.Name,
                     TemplateName = unitAppearance.Template.Name,
                     Type = unitAppearance.Type.ToString(),
+                    Params = JsonSerializer.Deserialize<Dictionary<string, string>>(unitAppearance.Params)
                 });
             }
 
