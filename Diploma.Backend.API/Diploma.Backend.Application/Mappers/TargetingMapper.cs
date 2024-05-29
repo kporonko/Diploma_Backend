@@ -27,7 +27,10 @@ namespace Diploma.Backend.Application.Mappers
             {
                 Id = targeting.Id,
                 Name = targeting.Name,
-                CountriesIds = targeting.CountryInTargetings.Select(c => c.CountryId).ToList(),
+                Countries = targeting.CountryInTargetings.ToDictionary(
+                    c => c.CountryId,
+                    c => c.Country.Name
+                ),
                 SurveysIds = !targeting.Surveys.IsNullOrEmpty() ? targeting.Surveys.Select(s => s.Id).ToList() : null
             };
         }
