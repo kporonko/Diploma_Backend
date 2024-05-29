@@ -12,5 +12,6 @@ namespace Diploma.Backend.Application.Dto.Response
         public string Name { get; set; }
         public string TemplateName { get; set; }
         public string Type { get; set; }
+        public Dictionary<string, string> Params { get; set; }
     }
 }
