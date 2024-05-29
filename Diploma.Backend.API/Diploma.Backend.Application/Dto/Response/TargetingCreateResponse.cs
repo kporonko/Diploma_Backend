@@ -11,7 +11,7 @@ namespace Diploma.Backend.Application.Dto.Response
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<int> CountriesIds { get; set; }
+        public Dictionary<int, string> Countries { get; set; }
         public List<int>? SurveysIds { get; set; }
     }
 }
