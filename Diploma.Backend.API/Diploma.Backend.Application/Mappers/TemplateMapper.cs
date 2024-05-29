@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Diploma.Backend.Application.Mappers
@@ -16,24 +17,24 @@ namespace Diploma.Backend.Application.Mappers
         /// </summary>
         /// <param name="t">Template object to map.</param>
         /// <returns>TemplateResponse object.</returns>
-        public static TemplateResponse MapTemplateToResponse(Template t)
-        {
-            return new TemplateResponse
-            {
-                Id = t.Id,
-                Name = t.Name,
-                TemplateCode = t.TemplateCode,
-                DefaultParams = t.DefaultParams
-            };
-        }
-
         public static Template ConvertTemplateCreateRequestToTemplate(TemplateCreateRequest request)
         {
             return new Template
             {
                 Name = request.Name,
                 TemplateCode = request.TemplateCode,
-                DefaultParams = request.DefaultParams,
+                DefaultParams = JsonSerializer.Serialize(request.DefaultParams)
+            };
+        }
+
+        public static TemplateResponse MapTemplateToResponse(Template template)
+        {
+            return new TemplateResponse
+            {
+                Id = template.Id,
+                Name = template.Name,
+                TemplateCode = template.TemplateCode,
+                DefaultParams = JsonSerializer.Deserialize<Dictionary<string, string>>(template.DefaultParams)
             };
         }
     }
