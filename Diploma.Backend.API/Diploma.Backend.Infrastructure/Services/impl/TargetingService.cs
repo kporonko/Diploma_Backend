@@ -59,7 +59,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
                 if (dbUser == null)
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TargetingCreateResponse>(ErrorCodes.UserNotFound.ToString());
 
-                var targeting = _context.Targetings.Include(t => t.CountryInTargetings).Include(x => x.Surveys).FirstOrDefault(t => t.Id == id && t.UserId == dbUser.Id);
+                var targeting = _context.Targetings.Include(t => t.CountryInTargetings).ThenInclude(ct => ct.Country).Include(x => x.Surveys).FirstOrDefault(t => t.Id == id && t.UserId == dbUser.Id);
                 if (targeting == null)
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TargetingCreateResponse>(ErrorCodes.TargetingNotFound.ToString());
 
@@ -80,7 +80,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
                 if (dbUser == null)
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TargetingCreateResponse>(ErrorCodes.UserNotFound.ToString());
 
-                var targeting = _context.Targetings.Include(t => t.CountryInTargetings).Include(x => x.Surveys).FirstOrDefault(t => t.Id == request.Id && t.UserId == dbUser.Id);
+                var targeting = _context.Targetings.Include(t => t.CountryInTargetings).ThenInclude(ct => ct.Country).Include(x => x.Surveys).FirstOrDefault(t => t.Id == request.Id && t.UserId == dbUser.Id);
                 if (targeting == null)
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TargetingCreateResponse>(ErrorCodes.TargetingNotFound.ToString());
 
@@ -208,11 +208,13 @@ namespace Diploma.Backend.Infrastructure.Services.impl
         }
 
 
-        // TODO
-        // Do we actually need this ?
         private void LoadCountriesToTargeting(ref Targeting targeting)
         {
-            _context.Entry(targeting).Collection(t => t.CountryInTargetings).Load();
+            _context.Entry(targeting)
+                    .Collection(t => t.CountryInTargetings)
+                    .Query()
+                    .Include(ct => ct.Country)
+                    .Load();
         }
 
         private void FillCountriesToTargeting(ref Targeting targeting, List<int> countriesIds)
