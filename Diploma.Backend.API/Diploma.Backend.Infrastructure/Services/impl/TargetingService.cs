@@ -103,7 +103,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
                 if (dbUser == null)
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<List<TargetingCreateResponse>>(ErrorCodes.UserNotFound.ToString());
 
-                _context.Entry(dbUser).Collection(x => x.Targetings).Query().Include(x => x.CountryInTargetings).Load();
+                _context.Entry(dbUser).Collection(x => x.Targetings).Query().Include(x => x.CountryInTargetings).ThenInclude(x => x.Country).Load();
 
                 var response = dbUser.Targetings.Select(x => TargetingMapper.MapTargetingToResponse(x)).ToList();
                 return BaseResponseGenerator.GenerateValidBaseResponse(response);
@@ -121,7 +121,7 @@ namespace Diploma.Backend.Infrastructure.Services.impl
             if (dbUser == null)
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<string>(ErrorCodes.UserNotFound.ToString());
 
-            _context.Entry(dbUser).Collection(x => x.Targetings).Query().Include(x => x.CountryInTargetings).Load();
+            _context.Entry(dbUser).Collection(x => x.Targetings).Query().Include(x => x.CountryInTargetings).ThenInclude(x => x.Country).Load();
             var targeting = dbUser.Targetings.FirstOrDefault(x => x.Id == id);
 
             if (targeting == null)
