@@ -4,13 +4,13 @@ using Diploma.Backend.Infrastructure.PayPal.Facades;
 using Diploma.Backend.Infrastructure.PayPal.Facades.impl;
 using Diploma.Backend.Infrastructure.PayPal.Services;
 using Diploma.Backend.Infrastructure.Services.impl;
+using Diploma.Backend.Infrastructure.Stats.Services.impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RestSharp;
 using System.Text;
 using System.Text.Json.Serialization;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +27,7 @@ builder.Services.AddTransient<IPayPalFacade, PayPalFacade>();
 builder.Services.AddTransient<IRestClient, RestClient>();
 builder.Services.AddTransient<IPayPalService, PayPalService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IStatsRetriever, StatsRetriever>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

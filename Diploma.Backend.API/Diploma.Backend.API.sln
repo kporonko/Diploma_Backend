@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Infrastructure", "Diploma.Backend.Infrastructure\Diploma.Backend.Infrastructure.csproj", "{D410A54B-71A6-411E-A495-CF51902B8990}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Backend.Infrastructure.PayPal", "Diploma.Backend.Infrastructure.PayPal\Diploma.Backend.Infrastructure.PayPal.csproj", "{F8EE3CE6-6090-4101-8C52-6555BE23C88B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Infrastructure.PayPal", "Diploma.Backend.Infrastructure.PayPal\Diploma.Backend.Infrastructure.PayPal.csproj", "{F8EE3CE6-6090-4101-8C52-6555BE23C88B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Backend.Infrastructure.Stats", "Diploma.Backend.Infrastructure.Vertica\Diploma.Backend.Infrastructure.Stats.csproj", "{02C0BA1C-BC8A-40C7-B097-D204225B894C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{F8EE3CE6-6090-4101-8C52-6555BE23C88B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8EE3CE6-6090-4101-8C52-6555BE23C88B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8EE3CE6-6090-4101-8C52-6555BE23C88B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
