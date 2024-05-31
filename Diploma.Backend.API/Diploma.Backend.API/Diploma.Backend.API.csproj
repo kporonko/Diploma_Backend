@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Diploma.Backend.Application\Diploma.Backend.Application.csproj" />
     <ProjectReference Include="..\Diploma.Backend.Domain\Diploma.Backend.Domain.csproj" />
     <ProjectReference Include="..\Diploma.Backend.Infrastructure.PayPal\Diploma.Backend.Infrastructure.PayPal.csproj" />
+    <ProjectReference Include="..\Diploma.Backend.Infrastructure.Vertica\Diploma.Backend.Infrastructure.Stats.csproj" />
     <ProjectReference Include="..\Diploma.Backend.Infrastructure\Diploma.Backend.Infrastructure.csproj" />
   </ItemGroup>
 
