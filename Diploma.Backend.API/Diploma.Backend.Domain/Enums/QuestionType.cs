@@ -8,6 +8,8 @@ namespace Diploma.Backend.Domain.Enums
 {
     public enum QuestionType
     {
-        QuestionType1
+        Unknown = 0,
+        Radiobutton,
+        Checkbox
     }
 }

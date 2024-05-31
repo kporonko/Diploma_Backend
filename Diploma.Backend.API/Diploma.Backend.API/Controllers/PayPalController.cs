@@ -21,8 +21,6 @@ namespace Diploma.Backend.API.Controllers
             _payPalService = payPalService;
         }
 
-        // TODO
-        // Maybe add user jwt token and add to db some info abt sbscr.
         [HttpPost]
         [Route("create-plan")]
         public async Task<IActionResult> CreatePlan([FromBody] PayPalPlanRequest request)

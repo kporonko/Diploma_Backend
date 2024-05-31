@@ -8,6 +8,10 @@ namespace Diploma.Backend.Domain.Enums
 {
     public enum AppearanceType
     {
-        TestType
+        Unknown = 0,
+        Right,
+        Left,
+        Overlay,
+        InText
     }
 }

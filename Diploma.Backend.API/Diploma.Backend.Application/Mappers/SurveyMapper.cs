@@ -34,7 +34,6 @@ namespace Diploma.Backend.Application.Mappers
 
         private static List<Question> ConvertQuestionRequestToQuestion(List<SurveyCreateRequestQuestion> questions, Survey survey)
         {
-            // type prop?
             var questionList = new List<Question>();
             foreach (var question in questions)
             {
@@ -42,7 +41,7 @@ namespace Diploma.Backend.Application.Mappers
                 {
                     OrderNumber = question.OrderNumber,
                     SurveyId = survey.Id,
-                    Type = Domain.Enums.QuestionType.QuestionType1
+                    Type = (Domain.Enums.QuestionType)question.Type
                 };
                 newQuestion.QuestionLine = ConvertQuestionLineRequestToQuestionLine(newQuestion, question);
                 newQuestion.QuestionOptions = ConvertQuestionOptionsRequestToQuestionOptions(newQuestion, question);
