@@ -62,83 +62,91 @@ namespace Diploma.Backend.Infrastructure.Stats.Services.impl
             return null;
         }
 
-        private async Task<StatsForOption> GetStatsForOption(VerticaConnection connection, int questionId)
+        private async Task<List<StatsForOption>> GetStatsForOption(VerticaConnection connection, int questionId)
         {
+            var statsForOptions = new List<StatsForOption>();
+
             using (var command = CreateCommand(connection, QueryProvider.GetStatsForOptionQuery, questionId))
             using (var reader = await command.ExecuteReaderAsync())
             {
-                if (await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
-                    return new StatsForOption
+                    statsForOptions.Add(new StatsForOption
                     {
                         QuestionId = reader.GetInt32(reader.GetOrdinal("question_id")),
                         OptionId = reader.GetInt32(reader.GetOrdinal("option_id")),
                         Answered = reader.GetInt32(reader.GetOrdinal("answered"))
-                    };
+                    });
                 }
             }
 
-            return null;
+            return statsForOptions;
         }
 
-        private async Task<StatsForGender> GetStatsForGender(VerticaConnection connection, int questionId)
+        private async Task<List<StatsForGender>> GetStatsForGender(VerticaConnection connection, int questionId)
         {
+            var statsForGenders = new List<StatsForGender>();
+
             using (var command = CreateCommand(connection, QueryProvider.GetStatsForGenderQuery, questionId))
             using (var reader = await command.ExecuteReaderAsync())
             {
-                if (await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
-                    return new StatsForGender
+                    statsForGenders.Add(new StatsForGender
                     {
                         QuestionId = reader.GetInt32(reader.GetOrdinal("question_id")),
                         OptionId = reader.GetInt32(reader.GetOrdinal("option_id")),
                         Gender = reader.GetString(reader.GetOrdinal("gender")),
                         Answered = reader.GetInt32(reader.GetOrdinal("answered"))
-                    };
+                    });
                 }
             }
 
-            return null;
+            return statsForGenders;
         }
 
-        private async Task<StatsForGeo> GetStatsForGeo(VerticaConnection connection, int questionId)
+        private async Task<List<StatsForGeo>> GetStatsForGeo(VerticaConnection connection, int questionId)
         {
+            var statsForGeos = new List<StatsForGeo>();
+
             using (var command = CreateCommand(connection, QueryProvider.GetStatsForGeoQuery, questionId))
             using (var reader = await command.ExecuteReaderAsync())
             {
-                if (await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
-                    return new StatsForGeo
+                    statsForGeos.Add(new StatsForGeo
                     {
                         QuestionId = reader.GetInt32(reader.GetOrdinal("question_id")),
                         OptionId = reader.GetInt32(reader.GetOrdinal("option_id")),
                         Geo = reader.GetString(reader.GetOrdinal("geo")),
                         Answered = reader.GetInt32(reader.GetOrdinal("answered"))
-                    };
+                    });
                 }
             }
 
-            return null;
+            return statsForGeos;
         }
 
-        private async Task<StatsForLang> GetStatsForLang(VerticaConnection connection, int questionId)
+        private async Task<List<StatsForLang>> GetStatsForLang(VerticaConnection connection, int questionId)
         {
+            var statsForLangs = new List<StatsForLang>();
+
             using (var command = CreateCommand(connection, QueryProvider.GetStatsForLangQuery, questionId))
             using (var reader = await command.ExecuteReaderAsync())
             {
-                if (await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
-                    return new StatsForLang
+                    statsForLangs.Add(new StatsForLang
                     {
                         QuestionId = reader.GetInt32(reader.GetOrdinal("question_id")),
                         OptionId = reader.GetInt32(reader.GetOrdinal("option_id")),
                         Lang = reader.GetString(reader.GetOrdinal("lang")),
                         Answered = reader.GetInt32(reader.GetOrdinal("answered"))
-                    };
+                    });
                 }
             }
 
-            return null;
+            return statsForLangs;
         }
 
         private VerticaCommand CreateCommand(VerticaConnection connection, string query, int questionId)

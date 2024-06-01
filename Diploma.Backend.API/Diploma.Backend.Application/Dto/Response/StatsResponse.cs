@@ -9,10 +9,10 @@ namespace Diploma.Backend.Application.Dto.Response
     public class StatsResponse
     {
         public StatsForQuestion StatsForQuestion { get; set; }
-        public StatsForOption StatsForOption { get; set; }
-        public StatsForGender StatsForGender { get; set; }
-        public StatsForGeo StatsForGeo { get; set; }
-        public StatsForLang StatsForLang { get; set; }
+        public List<StatsForOption> StatsForOption { get; set; }
+        public List<StatsForGender> StatsForGender { get; set; }
+        public List<StatsForGeo> StatsForGeo { get; set; }
+        public List<StatsForLang> StatsForLang { get; set; }
 
     }
 
