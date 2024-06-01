@@ -50,7 +50,9 @@ namespace Diploma.Backend.Infrastructure.Services.impl
                 BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnitResponse>(ErrorCodes.UserNotFound.ToString());
 
             var surveyUnit = await _context.SurveyUnits.FirstOrDefaultAsync(x => x.Id == surveyUnitCreateRequest.Id);
-            
+            if (surveyUnit == null)
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<string>(ErrorCodes.SurveyUnitNotFound.ToString());
+
             await DeleteSurveyUnitModelFromDb(surveyUnit);
             return BaseResponseGenerator.GenerateValidBaseResponse("Survey unit deleted");
         }
