@@ -13,5 +13,6 @@ namespace Diploma.Backend.Application.Dto.Response
         public string Name { get; set; }
         public DateTime DateBy { get; set; }
         public int NumberOfQuestions { get; set; }
+        public Targeting Targeting { get; set; }
     }
 }

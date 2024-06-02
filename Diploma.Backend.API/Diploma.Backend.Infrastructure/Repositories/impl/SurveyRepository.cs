@@ -45,6 +45,7 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
                 .Include(s => s.Questions)
                 .ThenInclude(q => q.QuestionLine)
                 .ThenInclude(ql => ql.QuestionTranslations)
+                .Include(s => s.Targeting)
                 .FirstOrDefaultAsync(x => x.Id == surveyId);
         }
 
@@ -57,6 +58,7 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
         {
             return await _context.Surveys
                 .Include(x => x.Questions)
+                .Include(x => x.Targeting)
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
         }

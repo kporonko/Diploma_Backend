@@ -102,6 +102,7 @@ namespace Diploma.Backend.Application.Services.impl
         {
             survey.Name = surveyEditRequest.Name;
             survey.DateBy = surveyEditRequest.DateBy;
+            survey.TargetingId = surveyEditRequest.TargetingId;
         }
 
         private void RemoveExistingQuestionsAndOptions(Survey survey)

@@ -12,6 +12,7 @@ namespace Diploma.Backend.Application.Dto.Request
         public string Name { get; set; }
         public DateTime DateBy { get; set; }
         public List<SurveyCreateRequestQuestion> Questions { get; set; }
+        public int TargetingId { get; set; }
     }
 
     public class SurveyCreateRequestQuestion

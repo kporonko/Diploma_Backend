@@ -11,12 +11,8 @@ namespace Diploma.Backend.Application.Mappers
 {
     public static class SurveyMapper
     {
-        // not sure it works in the way that we try to assign id of entity that is not being set yet.
         public static Survey ConvertSurveyCreateRequestToSurvey(SurveyCreateRequest surveyCreateRequest, User user)
         {
-            // params prop?
-            // survey in unit prop?
-            // targeting prop?
             var survey = new Survey
             {
                 DateBy = surveyCreateRequest.DateBy,
@@ -24,7 +20,7 @@ namespace Diploma.Backend.Application.Mappers
                 User = user,
                 UserId = user.Id,
                 Params = "",
-                TargetingId = 1
+                TargetingId = surveyCreateRequest.TargetingId
             };
 
             survey.Questions = ConvertQuestionRequestToQuestion(surveyCreateRequest.Questions, survey);
@@ -108,7 +104,8 @@ namespace Diploma.Backend.Application.Mappers
                 Id = response.Id,
                 DateBy = response.DateBy,
                 Name = response.Name,
-                Questions = ConvertQuestionListToResponseList(response)
+                Questions = ConvertQuestionListToResponseList(response),
+                Targeting = response.Targeting
             };
         }
 
@@ -119,7 +116,8 @@ namespace Diploma.Backend.Application.Mappers
                 Id = response.Id,
                 DateBy = response.DateBy,
                 Name = response.Name,
-                NumberOfQuestions = response.Questions.Count
+                NumberOfQuestions = response.Questions.Count,
+                Targeting = response.Targeting
             };
         }
 
