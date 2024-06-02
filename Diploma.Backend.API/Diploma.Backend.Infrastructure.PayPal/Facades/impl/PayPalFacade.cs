@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Diploma.Backend.Infrastructure.PayPal.Models;
 using Newtonsoft.Json;
+using Diploma.Backend.Domain.Enums;
 
 namespace Diploma.Backend.Infrastructure.PayPal.Facades.impl
 {
@@ -60,8 +61,7 @@ namespace Diploma.Backend.Infrastructure.PayPal.Facades.impl
 
             if (!response.IsSuccessful)
             {
-                //
-                throw new Exception($"Error");
+                throw new Exception(ErrorCodes.PayPalCommunicationError.ToString());
             }
 
             return string.IsNullOrEmpty(response.Content) ? new T() : JsonConvert.DeserializeObject<T>(response.Content);

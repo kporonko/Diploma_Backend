@@ -14,9 +14,9 @@ namespace Diploma.Backend.API.Controllers
     [ApiController]
     public class PayPalController : ControllerBase
     {
-        private readonly IPayPalService _payPalService;
+        private readonly IPaymentService _payPalService;
 
-        public PayPalController(IPayPalService payPalService)
+        public PayPalController(IPaymentService payPalService)
         {
             _payPalService = payPalService;
         }

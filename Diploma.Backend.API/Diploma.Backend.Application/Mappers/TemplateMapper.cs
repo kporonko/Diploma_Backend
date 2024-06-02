@@ -29,12 +29,13 @@ namespace Diploma.Backend.Application.Mappers
 
         public static TemplateResponse MapTemplateToResponse(Template template)
         {
+            var defaultParams = template.DefaultParams != null ? JsonSerializer.Deserialize<Dictionary<string, string>>(template.DefaultParams) : new Dictionary<string, string>();
             return new TemplateResponse
             {
                 Id = template.Id,
                 Name = template.Name,
                 TemplateCode = template.TemplateCode,
-                DefaultParams = JsonSerializer.Deserialize<Dictionary<string, string>>(template.DefaultParams)
+                DefaultParams = defaultParams
             };
         }
     }

@@ -1,8 +1,10 @@
-﻿using Diploma.Backend.Domain.Enums;
+﻿using Diploma.Backend.Application.Services;
+using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Models;
 using Diploma.Backend.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PayPalCheckoutSdk.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,10 @@ namespace Diploma.Backend.Infrastructure.Data
 {
     public class ApplicationContext : DbContext
     {
+        public ApplicationContext()
+        {
+
+        }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {

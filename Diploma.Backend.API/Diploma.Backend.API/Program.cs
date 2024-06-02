@@ -1,10 +1,20 @@
+using Diploma.Backend.Application.Repositories;
+using Diploma.Backend.Application.Repositories.Payment;
+using Diploma.Backend.Application.Repositories.Payment.Proxies;
+using Diploma.Backend.Application.Repositories.Stats;
 using Diploma.Backend.Application.Services;
+using Diploma.Backend.Application.Services.impl;
+using Diploma.Backend.Application.Services.Payment.impl;
+using Diploma.Backend.Application.Services.Stats.impl;
 using Diploma.Backend.Infrastructure.Data;
 using Diploma.Backend.Infrastructure.PayPal.Facades;
 using Diploma.Backend.Infrastructure.PayPal.Facades.impl;
-using Diploma.Backend.Infrastructure.PayPal.Services;
-using Diploma.Backend.Infrastructure.Services.impl;
-using Diploma.Backend.Infrastructure.Stats.Services.impl;
+using Diploma.Backend.Infrastructure.PayPal.Proxies;
+using Diploma.Backend.Infrastructure.PayPal.Proxies.impl;
+using Diploma.Backend.Infrastructure.PayPal.Repositories.impl;
+using Diploma.Backend.Infrastructure.Repositories;
+using Diploma.Backend.Infrastructure.Repositories.impl;
+using Diploma.Backend.Infrastructure.Stats.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,9 +35,19 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
 builder.Services.AddTransient<ISurveyUnitService, SurveyUnitService>();
 builder.Services.AddTransient<IPayPalFacade, PayPalFacade>();
 builder.Services.AddTransient<IRestClient, RestClient>();
-builder.Services.AddTransient<IPayPalService, PayPalService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IStatsRetriever, StatsRetriever>();
+builder.Services.AddTransient<IAuthRepository, AuthRepository>();
+builder.Services.AddTransient<ISurveyRepository, SurveyRepository>();
+builder.Services.AddTransient<ISurveyUnitRepository, SurveyUnitRepository>();
+builder.Services.AddTransient<ITargetingRepository, TargetingRepository>();
+builder.Services.AddTransient<ITemplateRepository, TemplateRepository>();
+builder.Services.AddTransient<IUnitAppearanceRepository, UnitAppearanceRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IPaymentRepository, PayPalRepository>();
+builder.Services.AddTransient<IPaymentProxy, PayPalProxy>();
+builder.Services.AddTransient<IStatsRepository, StatsRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

@@ -15,7 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Infrastruct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Infrastructure.PayPal", "Diploma.Backend.Infrastructure.PayPal\Diploma.Backend.Infrastructure.PayPal.csproj", "{F8EE3CE6-6090-4101-8C52-6555BE23C88B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Backend.Infrastructure.Stats", "Diploma.Backend.Infrastructure.Vertica\Diploma.Backend.Infrastructure.Stats.csproj", "{02C0BA1C-BC8A-40C7-B097-D204225B894C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Infrastructure.Stats", "Diploma.Backend.Infrastructure.Vertica\Diploma.Backend.Infrastructure.Stats.csproj", "{02C0BA1C-BC8A-40C7-B097-D204225B894C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diploma.Backend.Tests", "Diploma.Backend.Tests", "{4B9D7C36-01A6-44A9-8973-AC4BD362D962}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma.Backend.Application.Tests", "Diploma.Backend.Infrastructure.Tests\Diploma.Backend.Application.Tests.csproj", "{64E129A2-D500-4374-B842-31D3B1B86AE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Backend.Infrastructure.PayPal.Tests", "Diploma.Backend.Infrastructure.PayPal.Tests\Diploma.Backend.Infrastructure.PayPal.Tests.csproj", "{CEBD3865-BE0E-44AA-8E2F-F241D65F6530}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma.Backend.Application.Tests.Integration", "Diploma.Backend.API.Tests.Integration\Diploma.Backend.Application.Tests.Integration.csproj", "{3EA0CC69-312E-4109-95D8-299A3E259256}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +55,18 @@ Global
 		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02C0BA1C-BC8A-40C7-B097-D204225B894C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64E129A2-D500-4374-B842-31D3B1B86AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E129A2-D500-4374-B842-31D3B1B86AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E129A2-D500-4374-B842-31D3B1B86AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E129A2-D500-4374-B842-31D3B1B86AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBD3865-BE0E-44AA-8E2F-F241D65F6530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBD3865-BE0E-44AA-8E2F-F241D65F6530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBD3865-BE0E-44AA-8E2F-F241D65F6530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBD3865-BE0E-44AA-8E2F-F241D65F6530}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EA0CC69-312E-4109-95D8-299A3E259256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA0CC69-312E-4109-95D8-299A3E259256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA0CC69-312E-4109-95D8-299A3E259256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA0CC69-312E-4109-95D8-299A3E259256}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +74,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{64ABD076-144F-43BE-BF57-EBC630CB7714} = {8F0C572F-6361-4D04-A1DA-7A070015308C}
 		{2C6F4DE6-18CB-4361-B639-3522F5E57878} = {8F0C572F-6361-4D04-A1DA-7A070015308C}
+		{64E129A2-D500-4374-B842-31D3B1B86AE4} = {4B9D7C36-01A6-44A9-8973-AC4BD362D962}
+		{CEBD3865-BE0E-44AA-8E2F-F241D65F6530} = {4B9D7C36-01A6-44A9-8973-AC4BD362D962}
+		{3EA0CC69-312E-4109-95D8-299A3E259256} = {4B9D7C36-01A6-44A9-8973-AC4BD362D962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D36A7EA6-0DE2-4A28-9A54-6DC73C5DE958}

@@ -18,6 +18,9 @@ namespace Diploma.Backend.Domain.Enums
         UnitAppearanceNotFound,
         TargetingNotFound,
         SurveyNotFound,
-        SurveyUnitNotFound
+        SurveyUnitNotFound,
+        SubscriptionOrUserNotFound,
+        SubscriptionAlreadyExists,
+        PayPalCommunicationError
     }
 }

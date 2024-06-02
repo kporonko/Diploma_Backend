@@ -1,5 +1,6 @@
 ﻿using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Domain.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace Diploma.Backend.Application.Mappers
                 Id = ua.Id,
                 Name = ua.Name,
                 TemplateName = ua.Template.Name,
-                Type = ua.Type.ToString()
+                Type = ua.Type.ToString(),
+                Params = JsonConvert.DeserializeObject<Dictionary<string, string>>(ua.Params)
             };
         }
     }
