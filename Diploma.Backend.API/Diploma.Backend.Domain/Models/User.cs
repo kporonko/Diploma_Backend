@@ -20,6 +20,6 @@ namespace Diploma.Backend.Domain.Models
         public List<SurveyUnit> SurveyUnits { get; set; } = new List<SurveyUnit>();
         public List<UnitAppearance> UnitAppearances { get; set; } = new List<UnitAppearance>();
         public List<UnitSettings> UnitSettings { get; set; } = new List<UnitSettings>();
-        public Subscription Subscription { get; set; } = new Subscription();
+        public Subscription? Subscription { get; set; }
     }
 }
