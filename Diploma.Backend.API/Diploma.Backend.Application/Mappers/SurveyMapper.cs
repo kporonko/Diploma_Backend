@@ -11,7 +11,7 @@ namespace Diploma.Backend.Application.Mappers
 {
     public static class SurveyMapper
     {
-        public static Survey ConvertSurveyCreateRequestToSurvey(SurveyCreateRequest surveyCreateRequest, User user)
+        public static Survey ConvertSurveyCreateRequestToSurvey(SurveyCreateRequest surveyCreateRequest, User user, Targeting targeting)
         {
             var survey = new Survey
             {
@@ -20,7 +20,8 @@ namespace Diploma.Backend.Application.Mappers
                 User = user,
                 UserId = user.Id,
                 Params = "",
-                TargetingId = surveyCreateRequest.TargetingId
+                TargetingId = surveyCreateRequest.TargetingId,
+                Targeting = targeting
             };
 
             survey.Questions = ConvertQuestionRequestToQuestion(surveyCreateRequest.Questions, survey);
@@ -133,6 +134,7 @@ namespace Diploma.Backend.Application.Mappers
                     SurveyId = response.Id,
                     QuestionLine = question.QuestionLine,
                     QuestionOptions = ConvertQuestionOptionListToResponseList(question),
+                    Type = question.Type
                 });
             }
 

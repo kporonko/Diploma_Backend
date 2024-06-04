@@ -18,15 +18,13 @@ namespace Diploma.Backend.Application.Tests.Services.impl
     public class UnitAppearanceServiceTests
     {
         private Mock<IUnitAppearanceRepository> _unitAppearanceRepositoryMock;
-        private Mock<IConfiguration> _configurationMock;
         private UnitAppearanceService _unitAppearanceService;
 
         [SetUp]
         public void SetUp()
         {
             _unitAppearanceRepositoryMock = new Mock<IUnitAppearanceRepository>();
-            _configurationMock = new Mock<IConfiguration>();
-            _unitAppearanceService = new UnitAppearanceService(_unitAppearanceRepositoryMock.Object, _configurationMock.Object);
+            _unitAppearanceService = new UnitAppearanceService(_unitAppearanceRepositoryMock.Object);
         }
 
         [Test]

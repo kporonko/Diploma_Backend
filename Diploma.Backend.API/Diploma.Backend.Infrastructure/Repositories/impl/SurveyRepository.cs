@@ -74,5 +74,10 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
             _context.QuestionOptions.RemoveRange(survey.Questions.SelectMany(q => q.QuestionOptions));
             _context.Questions.RemoveRange(survey.Questions);
         }
+
+        public Targeting GetTargetingById(int targetingId)
+        {
+            return _context.Targetings.FirstOrDefault(x => x.Id == targetingId);
+        }
     }
 }

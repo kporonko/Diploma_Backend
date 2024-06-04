@@ -19,12 +19,10 @@ namespace Diploma.Backend.Application.Services.impl
     public class UnitAppearanceService : IUnitAppearanceService
     {
         private readonly IUnitAppearanceRepository _unitAppearanceRepository;
-        private readonly IConfiguration _config;
 
-        public UnitAppearanceService(IUnitAppearanceRepository unitAppearanceRepository, IConfiguration config)
+        public UnitAppearanceService(IUnitAppearanceRepository unitAppearanceRepository)
         {
             _unitAppearanceRepository = unitAppearanceRepository;
-            _config = config;
         }
 
         public async Task<BaseResponse<List<UnitAppearanceResponse>>> GetUnitAppearances(User userJwt)

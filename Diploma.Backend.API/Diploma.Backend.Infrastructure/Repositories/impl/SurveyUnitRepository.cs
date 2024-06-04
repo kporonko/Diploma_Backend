@@ -21,7 +21,12 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            return await _context.Users
+                .Include(x => x.SurveyUnits)
+                .ThenInclude(x => x.UnitAppearance)
+                .Include(x => x.SurveyUnits)
+                .ThenInclude(x => x.UnitSettings)
+                .FirstOrDefaultAsync(x => x.Id == userId);
         }
 
         public async Task<UnitAppearance> GetUnitAppearanceByIdAsync(int appearanceId)

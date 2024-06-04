@@ -31,8 +31,8 @@ namespace Diploma.Backend.Application.Services.impl
             var user = await _surveyRepository.GetUserByIdAsync(userJwt.Id);
             if (user == null)
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyResponse>(ErrorCodes.UserNotFound.ToString());
-
-            var response = SurveyMapper.ConvertSurveyCreateRequestToSurvey(surveyCreateRequest, user);
+            var targeting = _surveyRepository.GetTargetingById(surveyCreateRequest.TargetingId);
+            var response = SurveyMapper.ConvertSurveyCreateRequestToSurvey(surveyCreateRequest, user, targeting);
             await _surveyRepository.AddSurveyAsync(response);
             return BaseResponseGenerator.GenerateValidBaseResponse(SurveyMapper.ConvertSurveyToSurveyResponse(response));
         }

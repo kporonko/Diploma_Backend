@@ -16,5 +16,6 @@ namespace Diploma.Backend.Application.Repositories
         Task<List<Survey>> GetUserSurveysAsync(int userId);
         Task UpdateSurveyAsync(Survey survey);
         void DeleteQuestionsAndOptions(Survey survey);
+        Targeting GetTargetingById(int targetingId);
     }
 }
