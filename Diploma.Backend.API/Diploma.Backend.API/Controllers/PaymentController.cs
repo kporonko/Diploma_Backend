@@ -12,11 +12,11 @@ namespace Diploma.Backend.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class PayPalController : ControllerBase
+    public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _payPalService;
 
-        public PayPalController(IPaymentService payPalService)
+        public PaymentController(IPaymentService payPalService)
         {
             _payPalService = payPalService;
         }
