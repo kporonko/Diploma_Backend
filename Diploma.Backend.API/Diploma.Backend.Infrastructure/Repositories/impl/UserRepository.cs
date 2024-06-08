@@ -19,11 +19,11 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
             _context = context;
         }
 
-        public async Task<Subscription> GetSubscriptionByUserIdAsync(int userId)
+        public async Task<User> GetUserWithSubscription(int userId)
         {
-            return await _context.Subscriptions
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+            return await _context.Users
+                .Include(s => s.Subscription)
+                .FirstOrDefaultAsync(x => x.Id == userId);
         }
     }
 }

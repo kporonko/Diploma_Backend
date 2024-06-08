@@ -87,7 +87,7 @@ namespace Diploma.Backend.API.Controllers
         [HttpDelete]
         [Route("Targeting/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<BaseResponse<TargetingCreateResponse>>> DeleteTargeting([FromRoute] int id)
+        public async Task<ActionResult<BaseResponse<string>>> DeleteTargeting([FromRoute] int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = CurrentUserRetriever.GetCurrentUser(identity);

@@ -125,6 +125,7 @@ namespace Diploma.Backend.Application.Services.impl
                 Id = unitAppearance.Id,
                 Name = unitAppearance.Name,
                 TemplateName = unitAppearance.Template.Name,
+                TemplateId = unitAppearance.Template.Id,
                 Type = unitAppearance.Type.ToString(),
                 Params = JsonSerializer.Deserialize<Dictionary<string, string>>(unitAppearance.Params)
             }).ToList();

@@ -14,6 +14,6 @@ namespace Diploma.Backend.Application.Dto.Response
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
-        public Subscription Subscription { get; set; }
+        public SubscriptionResponse Subscription { get; set; }
     }
 }

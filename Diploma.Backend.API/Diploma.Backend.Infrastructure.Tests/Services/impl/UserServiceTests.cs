@@ -35,7 +35,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
                 User = new User { Id = 1, LastName = "Test" }
             };
 
-            _userRepositoryMock.Setup(repo => repo.GetSubscriptionByUserIdAsync(userJwt.Id))
+            _userRepositoryMock.Setup(repo => repo.GetUserWithSubscription(userJwt.Id))
                 .ReturnsAsync(subscription);
 
             // Act
@@ -54,7 +54,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             // Arrange
             var userJwt = new User { Id = 1 };
 
-            _userRepositoryMock.Setup(repo => repo.GetSubscriptionByUserIdAsync(userJwt.Id))
+            _userRepositoryMock.Setup(repo => repo.GetUserWithSubscription(userJwt.Id))
                 .ReturnsAsync((Subscription)null);
 
             // Act

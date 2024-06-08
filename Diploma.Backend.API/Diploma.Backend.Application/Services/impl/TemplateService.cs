@@ -9,6 +9,7 @@ using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,7 @@ namespace Diploma.Backend.Application.Services.impl
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TemplateResponse>(ErrorCodes.TemplateNotFound.ToString());
 
             response.Name = templateEditRequest.Name;
+            response.DefaultParams = JsonConvert.SerializeObject(templateEditRequest.DefaultParams);
             await _repository.UpdateTemplateAsync(response);
             return BaseResponseGenerator.GenerateValidBaseResponse(TemplateMapper.MapTemplateToResponse(response));
         }

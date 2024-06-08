@@ -36,7 +36,7 @@ namespace Diploma.Backend.Application.Services.impl
                     return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<TargetingCreateResponse>(ErrorCodes.UserNotFound.ToString());
 
                 var targeting = TargetingMapper.ConvertTargetingCreateRequestToTargeting(targetingCreateRequest, dbUser.Id);
-                FillCountriesToTargeting(targeting, targetingCreateRequest.CountriesIds);
+                await FillCountriesToTargeting(targeting, targetingCreateRequest.CountriesIds);
                 await _repository.SaveTargetingAsync(targeting);
                 var responseModel = TargetingMapper.MapTargetingToResponse(targeting);
                 return BaseResponseGenerator.GenerateValidBaseResponse(responseModel);

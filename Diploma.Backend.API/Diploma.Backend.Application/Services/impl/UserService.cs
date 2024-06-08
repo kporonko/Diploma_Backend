@@ -27,12 +27,12 @@ namespace Diploma.Backend.Application.Services.impl
 
         public async Task<BaseResponse<UserResponse>> GetUserData(User userJwt)
         {
-            var subscription = await _userRepository.GetSubscriptionByUserIdAsync(userJwt.Id);
-            if (subscription == null || subscription.User == null)
+            var user = await _userRepository.GetUserWithSubscription(userJwt.Id);
+            if (user == null)
             {
-                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<UserResponse>(ErrorCodes.SubscriptionOrUserNotFound.ToString());
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<UserResponse>(ErrorCodes.UserNotFound.ToString());
             }
-            return BaseResponseGenerator.GenerateValidBaseResponse(UserMapper.CreateUserDataResponse(subscription));
+            return BaseResponseGenerator.GenerateValidBaseResponse(UserMapper.CreateUserDataResponseWithoutSubscription(user));
         }
     }
 }

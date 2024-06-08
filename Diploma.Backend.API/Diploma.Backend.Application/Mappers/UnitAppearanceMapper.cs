@@ -23,6 +23,7 @@ namespace Diploma.Backend.Application.Mappers
                 Id = ua.Id,
                 Name = ua.Name,
                 TemplateName = ua.Template.Name,
+                TemplateId = ua.Template.Id,
                 Type = ua.Type.ToString(),
                 Params = JsonConvert.DeserializeObject<Dictionary<string, string>>(ua.Params)
             };

@@ -9,6 +9,6 @@ namespace Diploma.Backend.Application.Repositories
 {
     public interface IUserRepository
     {
-        Task<Subscription> GetSubscriptionByUserIdAsync(int userId);
+        Task<User> GetUserWithSubscription(int userId);
     }
 }
