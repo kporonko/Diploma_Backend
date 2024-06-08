@@ -26,6 +26,10 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
                 .ThenInclude(x => x.UnitAppearance)
                 .Include(x => x.SurveyUnits)
                 .ThenInclude(x => x.UnitSettings)
+                .Include(x => x.SurveyUnits)
+                .ThenInclude(x => x.SurveyInUnits)
+                .ThenInclude(x => x.Survey)
+                .Include(x => x.Surveys)
                 .FirstOrDefaultAsync(x => x.Id == userId);
         }
 

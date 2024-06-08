@@ -1,5 +1,6 @@
 ﻿using Diploma.Backend.Application.Dto.Request;
 using Diploma.Backend.Application.Dto.Response;
+using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -34,16 +35,23 @@ namespace Diploma.Backend.Application.Mappers
             var questionList = new List<Question>();
             foreach (var question in questions)
             {
-                var newQuestion = new Question
+                if (Enum.IsDefined(typeof(Domain.Enums.QuestionType), question.Type))
                 {
-                    OrderNumber = question.OrderNumber,
-                    SurveyId = survey.Id,
-                    Type = (Domain.Enums.QuestionType)question.Type
-                };
-                newQuestion.QuestionLine = ConvertQuestionLineRequestToQuestionLine(newQuestion, question);
-                newQuestion.QuestionOptions = ConvertQuestionOptionsRequestToQuestionOptions(newQuestion, question);
+                    var newQuestion = new Question
+                    {
+                        OrderNumber = question.OrderNumber,
+                        SurveyId = survey.Id,
+                        Type = (Domain.Enums.QuestionType)question.Type
+                    };
+                    newQuestion.QuestionLine = ConvertQuestionLineRequestToQuestionLine(newQuestion, question);
+                    newQuestion.QuestionOptions = ConvertQuestionOptionsRequestToQuestionOptions(newQuestion, question);
 
-                questionList.Add(newQuestion);
+                    questionList.Add(newQuestion);
+                }
+                else
+                {
+                    throw new Exception(ErrorCodes.QuestionTypeNotFound.ToString());
+                }
             }
             return questionList;
         }
@@ -106,10 +114,24 @@ namespace Diploma.Backend.Application.Mappers
                 DateBy = response.DateBy,
                 Name = response.Name,
                 Questions = ConvertQuestionListToResponseList(response),
-                Targeting = response.Targeting
+                Targeting = ConvertTargetingToResponse(response.Targeting)
             };
         }
 
+        private static TargetingResponse ConvertTargetingToResponse(Targeting? targeting)
+        {
+            if (targeting == null)
+            {
+                return null;
+            }
+            return new TargetingResponse
+            {
+                UserId = targeting.UserId,
+                Id = targeting.Id,
+                Name = targeting.Name,
+                CountryInTargetings = targeting.CountryInTargetings.Select(x => x.Country).ToDictionary(x => x.Id, x => x.Name)
+            };
+        }
         public static SurveyShortResponse ConvertSurveyToSurveyShortResponse(Survey response)
         {
             return new SurveyShortResponse
@@ -118,21 +140,21 @@ namespace Diploma.Backend.Application.Mappers
                 DateBy = response.DateBy,
                 Name = response.Name,
                 NumberOfQuestions = response.Questions.Count,
-                Targeting = response.Targeting
+                Targeting = ConvertTargetingToResponse(response.Targeting)
             };
         }
 
-        private static List<Question> ConvertQuestionListToResponseList(Survey response)
+        private static List<QuestionResponse> ConvertQuestionListToResponseList(Survey response)
         {
-            var resList = new List<Question>();
+            var resList = new List<QuestionResponse>();
             foreach (var question in response.Questions)
             {
-                resList.Add(new Question
+                resList.Add(new QuestionResponse
                 {
                     Id = question.Id,
                     OrderNumber = question.OrderNumber,
                     SurveyId = response.Id,
-                    QuestionLine = question.QuestionLine,
+                    QuestionLine = ConvertQuestionLineToResponse(question.QuestionLine),
                     QuestionOptions = ConvertQuestionOptionListToResponseList(question),
                     Type = question.Type
                 });
@@ -141,12 +163,39 @@ namespace Diploma.Backend.Application.Mappers
             return resList;
         }
 
-        private static List<QuestionOption> ConvertQuestionOptionListToResponseList(Question question)
+        private static QuestionLineResponse ConvertQuestionLineToResponse(QuestionLine questionLine)
         {
-            var resList = new List<QuestionOption>();
+            return new QuestionLineResponse
+            {
+                Id = questionLine.Id,
+                QuestionId = questionLine.QuestionId,
+                QuestionTranslations = ConvertQuestionTranslationToResponse(questionLine.QuestionTranslations)
+            };
+        }
+
+        private static List<QuestionTranslationResponse> ConvertQuestionTranslationToResponse(List<QuestionTranslation> questionTranslations)
+        {
+            var resList = new List<QuestionTranslationResponse>();
+            foreach (var translation in questionTranslations)
+            {
+                resList.Add(new QuestionTranslationResponse
+                {
+                    Id = translation.Id,
+                    Language = translation.Language,
+                    QuestionLineId = translation.QuestionLineId,
+                    QuestionTranslationLine = translation.QuestionTranslationLine
+                });
+            }
+
+            return resList;
+        }
+
+        private static List<QuestionOptionResponse> ConvertQuestionOptionListToResponseList(Question question)
+        {
+            var resList = new List<QuestionOptionResponse>();
             foreach (var option in question.QuestionOptions)
             {
-                resList.Add(new QuestionOption
+                resList.Add(new QuestionOptionResponse
                 {
                     Id = option.Id,
                     OrderNumber = option.OrderNumber,
@@ -158,20 +207,28 @@ namespace Diploma.Backend.Application.Mappers
         }
 
 
-        private static List<OptionTranslation> ConvertOptionTranslationListToResponseList(QuestionOption option)
+        private static List<OptionTranslationResponse> ConvertOptionTranslationListToResponseList(QuestionOption option)
         {
-            var resList = new List<OptionTranslation>();
+            var resList = new List<OptionTranslationResponse>();
             foreach (var translation in option.OptionTranslations)
             {
-                resList.Add(new OptionTranslation
+                resList.Add(new OptionTranslationResponse
                 {
                     Id = translation.Id,
                     Language = translation.Language,
                     OptionLine = translation.OptionLine,
-                    QuestionOptionId = option.Id,
+                    QuestionOptionId = option.Id
                 });
             }
             return resList;
+        }
+
+        public static SurveyIdResponse ConvertSurveyToSurveyIdResponse(Survey response)
+        {
+            return new SurveyIdResponse
+            {
+                Id = response.Id
+            };
         }
     }
 }

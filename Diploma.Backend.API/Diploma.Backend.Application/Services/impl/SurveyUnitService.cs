@@ -70,6 +70,10 @@ namespace Diploma.Backend.Application.Services.impl
             if (model == null)
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnitResponse>(ErrorCodes.SurveyUnitNotFound.ToString());
 
+            if (surveys.Count != surveyUnitEditRequest.SurveyIds.Count)
+            {
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnitResponse>(ErrorCodes.SurveyNotFound.ToString());
+            }
             var response = await EditSurveyUnitModel(surveyUnitEditRequest, model);
             return BaseResponseGenerator.GenerateValidBaseResponse(SurveyUnitMapper.MapSurveyUnitToResponse(model, surveys));
         }
@@ -85,17 +89,18 @@ namespace Diploma.Backend.Application.Services.impl
             return BaseResponseGenerator.GenerateValidBaseResponse(listResponses);
         }
 
-        public async Task<BaseResponse<SurveyUnit>> GetSurveyUnit(User data, int id)
+        public async Task<BaseResponse<SurveyUnitResponse>> GetSurveyUnit(User data, int id)
         {
             var user = await _repository.GetUserByIdAsync(data.Id);
             if (user == null)
-                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnit>(ErrorCodes.UserNotFound.ToString());
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnitResponse>(ErrorCodes.UserNotFound.ToString());
 
             var unit = user.SurveyUnits.FirstOrDefault(x => x.Id == id);
             if (unit == null)
-                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnit>(ErrorCodes.SurveyUnitNotFound.ToString());
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyUnitResponse>(ErrorCodes.SurveyUnitNotFound.ToString());
+            var surveysInUnit = unit.SurveyInUnits.Select(siu => siu.Survey).ToList();
 
-            return BaseResponseGenerator.GenerateValidBaseResponse(unit);
+            return BaseResponseGenerator.GenerateValidBaseResponse(SurveyUnitMapper.MapSurveyUnitToResponse(unit, surveysInUnit));
         }
 
         private async Task<SurveyUnitResponse> EditSurveyUnitModel(SurveyUnitEditRequest surveyUnitEditRequest, SurveyUnit surveyUnit)

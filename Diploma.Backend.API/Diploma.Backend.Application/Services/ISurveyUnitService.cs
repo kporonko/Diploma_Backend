@@ -16,6 +16,6 @@ namespace Diploma.Backend.Application.Services
         Task<BaseResponse<SurveyUnitResponse>> EditSurveyUnit(User userJwt, SurveyUnitEditRequest surveyUnitCreateRequest);
         Task<BaseResponse<string>> DeleteSurveyUnit(User userJwt, SurveyUnitDeleteRequest surveyUnitCreateRequest);
         Task<BaseResponse<List<SurveyUnitResponse>>> GetSurveyUnits(User userJwt);
-        Task<BaseResponse<SurveyUnit>> GetSurveyUnit(User data, int id);
+        Task<BaseResponse<SurveyUnitResponse>> GetSurveyUnit(User data, int id);
     }
 }

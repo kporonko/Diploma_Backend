@@ -25,7 +25,7 @@ namespace Diploma.Backend.API.Controllers
         [HttpPost]
         [Route("Survey")]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<BaseResponse<SurveyResponse>>> Create([FromBody] SurveyCreateRequest request)
+        public async Task<ActionResult<BaseResponse<SurveyIdResponse>>> Create([FromBody] SurveyCreateRequest request)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = CurrentUserRetriever.GetCurrentUser(identity);
@@ -110,7 +110,7 @@ namespace Diploma.Backend.API.Controllers
         [HttpGet]
         [Route("SurveysByUser")]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<BaseResponse<SurveyResponse>>> SurveyByUser()
+        public async Task<ActionResult<BaseResponse<List<SurveyShortResponse>>>> SurveyByUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = CurrentUserRetriever.GetCurrentUser(identity);

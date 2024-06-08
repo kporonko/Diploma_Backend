@@ -109,7 +109,7 @@ namespace Diploma.Backend.API.Controllers
         [HttpGet]
         [Route("SurveyUnit/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<BaseResponse<SurveyUnit>>> Get([FromRoute] int id)
+        public async Task<ActionResult<BaseResponse<SurveyUnitResponse>>> Get([FromRoute] int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = CurrentUserRetriever.GetCurrentUser(identity);

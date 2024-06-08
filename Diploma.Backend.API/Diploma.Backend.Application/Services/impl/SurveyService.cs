@@ -26,15 +26,18 @@ namespace Diploma.Backend.Application.Services.impl
             _surveyRepository = surveyRepository;
         }
 
-        public async Task<BaseResponse<SurveyResponse>> CreateSurvey(User userJwt, SurveyCreateRequest surveyCreateRequest)
+        public async Task<BaseResponse<SurveyIdResponse>> CreateSurvey(User userJwt, SurveyCreateRequest surveyCreateRequest)
         {
             var user = await _surveyRepository.GetUserByIdAsync(userJwt.Id);
             if (user == null)
-                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyResponse>(ErrorCodes.UserNotFound.ToString());
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyIdResponse>(ErrorCodes.UserNotFound.ToString());
             var targeting = _surveyRepository.GetTargetingById(surveyCreateRequest.TargetingId);
+            if (targeting == null)
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyIdResponse>(ErrorCodes.TargetingNotFound.ToString());
+            
             var response = SurveyMapper.ConvertSurveyCreateRequestToSurvey(surveyCreateRequest, user, targeting);
             await _surveyRepository.AddSurveyAsync(response);
-            return BaseResponseGenerator.GenerateValidBaseResponse(SurveyMapper.ConvertSurveyToSurveyResponse(response));
+            return BaseResponseGenerator.GenerateValidBaseResponse(SurveyMapper.ConvertSurveyToSurveyIdResponse(response));
         }
 
         public async Task<BaseResponse<string>> DeleteSurvey(User userJwt, SurveyDeleteRequest surveyDeleteRequest)
@@ -57,6 +60,10 @@ namespace Diploma.Backend.Application.Services.impl
             if (survey == null)
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyResponse>(ErrorCodes.SurveyNotFound.ToString());
 
+            var targeting = _surveyRepository.GetTargetingById(surveyEditRequest.TargetingId);
+            if (targeting == null)
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<SurveyResponse>(ErrorCodes.TargetingNotFound.ToString());
+            
             UpdateSurveyProperties(survey, surveyEditRequest);
             RemoveExistingQuestionsAndOptions(survey);
             if (surveyEditRequest.Questions != null)
@@ -117,6 +124,10 @@ namespace Diploma.Backend.Application.Services.impl
 
         private Question CreateQuestionFromRequest(SurveyCreateRequestQuestion questionRequest)
         {
+            if (!Enum.IsDefined(typeof(Domain.Enums.QuestionType), questionRequest.Type))
+            {
+                throw new Exception(ErrorCodes.QuestionTypeNotFound.ToString());
+            }
             return new Question
             {
                 Type = (QuestionType)questionRequest.Type,

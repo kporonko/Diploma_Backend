@@ -35,6 +35,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             var userJwt = new User { Id = 1 };
             var surveyCreateRequest = FormAddRequest();
             var user = new User { Id = 1 };
+            _surveyRepositoryMock.Setup(repo => repo.GetTargetingById(It.IsAny<int>())).Returns(new Targeting { Id = 1 });
             _surveyRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userJwt.Id)).ReturnsAsync(user);
 
             // Act
@@ -106,6 +107,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             var surveyEditRequest = new SurveyEditRequest { Id = 1, Name = "Edited Survey" };
             var user = new User { Id = 1 };
             var survey = new Survey { Id = 1 };
+            _surveyRepositoryMock.Setup(repo => repo.GetTargetingById(It.IsAny<int>())).Returns(new Targeting { Id = 1 });
             _surveyRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userJwt.Id)).ReturnsAsync(user);
             _surveyRepositoryMock.Setup(repo => repo.GetSurveyByIdWithDetailsAsync(surveyEditRequest.Id)).ReturnsAsync(survey);
 
@@ -126,6 +128,8 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             var surveyEditRequest = FormEditRequest();
             var user = new User { Id = 1 };
             var survey = new Survey { Id = 1 };
+            _surveyRepositoryMock.Setup(repo => repo.GetTargetingById(It.IsAny<int>())).Returns(new Targeting { Id = 1 });
+
             _surveyRepositoryMock.Setup(repo => repo.GetUserByIdAsync(userJwt.Id)).ReturnsAsync(user);
             _surveyRepositoryMock.Setup(repo => repo.GetSurveyByIdWithDetailsAsync(surveyEditRequest.Id)).ReturnsAsync(survey);
 

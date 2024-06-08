@@ -21,6 +21,7 @@ namespace Diploma.Backend.Domain.Enums
         SurveyUnitNotFound,
         SubscriptionOrUserNotFound,
         SubscriptionAlreadyExists,
-        PayPalCommunicationError
+        PayPalCommunicationError,
+        QuestionTypeNotFound
     }
 }

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Diploma.Backend.Application.Dto.Response
 {
-    public class SurveyShortResponse
+    public class QuestionOptionResponse
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime DateBy { get; set; }
-        public int NumberOfQuestions { get; set; }
-        public TargetingResponse Targeting { get; set; }
+        public int QuestionId { get; set; }
+        public int OrderNumber { get; set; }
+
+        public List<OptionTranslationResponse> OptionTranslations { get; set; } = new List<OptionTranslationResponse>();
     }
 }

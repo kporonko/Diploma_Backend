@@ -12,7 +12,7 @@ namespace Diploma.Backend.Application.Dto.Response
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime DateBy { get; set; }
-        public List<Question> Questions { get; set; }
-        public Targeting Targeting { get; set; }
+        public List<QuestionResponse> Questions { get; set; }
+        public TargetingResponse Targeting { get; set; }
     }
 }

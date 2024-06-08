@@ -282,15 +282,54 @@ namespace Diploma.Backend.Application.Tests.Services.impl
         public async Task GetSurveyUnit_Success_ReturnsValidResponse()
         {
             // Arrange
-            _repositoryMock.Setup(r => r.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User { Id = 1, SurveyUnits = new List<SurveyUnit> { new SurveyUnit { Id = 1 } } });
+            _repositoryMock.Setup(r => r.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(GetUser());
 
             // Act
-            var result = await _service.GetSurveyUnit(new User { Id = 1 }, 1);
+            var result = await _service.GetSurveyUnit(GetUser(), 1);
 
             // Assert
             Assert.IsNull(result.Error);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.Data.Id);
+        }
+
+        private User GetUser()
+        {
+            return new User
+            {
+                Id = 1,
+                SurveyUnits = new List<SurveyUnit>
+                {
+                    new SurveyUnit
+                    {
+                        Id = 1,
+                        SurveyInUnits = new List<SurveyInUnit>
+                        {
+                            new SurveyInUnit
+                            {
+                                SurveyId = 1,
+                                SurveyUnitId = 1,
+                                Survey = new Survey
+                                {
+                                   Id = 1,
+                                }
+                            }
+                        },
+                        AppearanceId  =1,
+                        UnitAppearance = new UnitAppearance
+                        {
+                            Id = 1,
+                        },
+                        UnitSettings = new UnitSettings
+                        {
+                            HideAfterNoSurveys = true,
+                            MaximumSurveysPerDevice = 1,
+                            MessageAfterNoSurveys = true,
+                            OneSurveyTakePerDevice = 2,
+                        }
+                    }
+                }
+            };
         }
     }
 }
