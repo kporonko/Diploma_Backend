@@ -40,11 +40,11 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
         {
             return await _context.Surveys
                 .Include(s => s.Questions)
-                .ThenInclude(q => q.QuestionOptions)
-                .ThenInclude(o => o.OptionTranslations)
+                    .ThenInclude(q => q.QuestionOptions)
+                    .ThenInclude(o => o.OptionTranslations)
                 .Include(s => s.Questions)
-                .ThenInclude(q => q.QuestionLine)
-                .ThenInclude(ql => ql.QuestionTranslations)
+                    .ThenInclude(q => q.QuestionLine)
+                    .ThenInclude(ql => ql.QuestionTranslations)
                 .Include(s => s.Targeting)
                 .FirstOrDefaultAsync(x => x.Id == surveyId);
         }
@@ -59,6 +59,8 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
             return await _context.Surveys
                 .Include(x => x.Questions)
                 .Include(x => x.Targeting)
+                    .ThenInclude(x => x.CountryInTargetings)
+                    .ThenInclude(x => x.Country)
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
         }

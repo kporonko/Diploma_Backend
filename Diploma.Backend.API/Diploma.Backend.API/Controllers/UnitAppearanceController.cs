@@ -83,5 +83,26 @@ namespace Diploma.Backend.API.Controllers
 
             return Created(HttpContext.GetEndpoint().DisplayName, result);
         }
+
+        [HttpDelete]
+        [Route("UnitAppearance")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult<BaseResponse<UnitAppearanceResponse>>> DeleteUnitAppearance([FromBody] UnitAppearanceDeleteRequest request)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = CurrentUserRetriever.GetCurrentUser(identity);
+            if (user.Error != null)
+            {
+                return Unauthorized(user);
+            }
+
+            var result = await _unitAppearanceService.DeleteUnitAppearance(user.Data, request.Id);
+            if (result.Error != null)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

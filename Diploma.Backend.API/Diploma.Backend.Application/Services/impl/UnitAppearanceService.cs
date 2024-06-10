@@ -90,7 +90,27 @@ namespace Diploma.Backend.Application.Services.impl
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<UnitAppearanceResponse>(ex.Message);
             }
         }
+        
+        public async Task<BaseResponse<string>> DeleteUnitAppearance(User userJwt, int unitAppearanceId)
+        {
+            try
+            {
+                var user = await _unitAppearanceRepository.GetUserWithUnitAppearancesAsync(userJwt.Id);
+                if (user == null)
+                    return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<string>(ErrorCodes.UserNotFound.ToString());
 
+                var unitAppearance = user.UnitAppearances.FirstOrDefault(x => x.Id == unitAppearanceId);
+                if (unitAppearance == null)
+                    return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<string>(ErrorCodes.UnitAppearanceNotFound.ToString());
+                
+                await _unitAppearanceRepository.DeleteUnitAppearanceAsync(unitAppearance);
+                return BaseResponseGenerator.GenerateValidBaseResponse("Unit appearance deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<string>(ex.Message);
+            }
+        }
         private void ChangeUnitAppearanceModelData(ref UnitAppearance unitAppearance, User user, Template template, UnitAppearanceCreateRequest unitAppearanceRequest)
         {
             unitAppearance.Name = unitAppearanceRequest.Name;

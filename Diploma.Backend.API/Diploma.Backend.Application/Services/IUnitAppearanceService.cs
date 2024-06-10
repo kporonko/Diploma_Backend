@@ -15,5 +15,6 @@ namespace Diploma.Backend.Application.Services
         Task<BaseResponse<List<UnitAppearanceResponse>>> GetUnitAppearances(User userJwt);
         Task<BaseResponse<UnitAppearanceResponse>> CreateUnitAppearance(User userJwt, UnitAppearanceCreateRequest unitAppearanceRequest);
         Task<BaseResponse<UnitAppearanceResponse>> EditUnitAppearance(User userJwt, UnitAppearanceCreateRequest unitAppearanceRequest);
+        Task<BaseResponse<string>> DeleteUnitAppearance(User userJwt, int unitAppearanceId);
     }
 }

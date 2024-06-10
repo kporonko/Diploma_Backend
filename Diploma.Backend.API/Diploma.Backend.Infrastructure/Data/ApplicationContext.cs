@@ -165,7 +165,7 @@ namespace Diploma.Backend.Infrastructure.Data
                 .HasOne(s => s.UnitAppearance)
                 .WithMany(su => su.SurveyUnits)
                 .HasForeignKey(s => s.AppearanceId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<UnitSettings>()
                 .HasKey(k => k.Id);

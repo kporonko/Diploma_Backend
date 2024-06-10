@@ -1,8 +1,10 @@
-﻿using Diploma.Backend.Application.Repositories;
+﻿using Diploma.Backend.Application.Dto.Response;
+using Diploma.Backend.Application.Repositories;
 using Diploma.Backend.Application.Services.impl;
 using Diploma.Backend.Domain.Enums;
 using Diploma.Backend.Domain.Models;
 using Moq;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,15 +30,17 @@ namespace Diploma.Backend.Application.Tests.Services.impl
         public async Task GetUserData_UserExists_ReturnsValidResponse()
         {
             // Arrange
-            var userJwt = new User { Id = 1 };
-            var subscription = new Subscription
+            var userJwt = new User 
             {
-                UserId = 1,
-                User = new User { Id = 1, LastName = "Test" }
+                Id = 1,
+                FirstName = "John",
+                Subscription = new Subscription
+                {
+                    SubscriptionId = "sss",
+                }
             };
-
             _userRepositoryMock.Setup(repo => repo.GetUserWithSubscription(userJwt.Id))
-                .ReturnsAsync(subscription);
+                .ReturnsAsync(userJwt);
 
             // Act
             var result = await _userService.GetUserData(userJwt);
@@ -44,7 +48,9 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual("Test", result.Data.LastName);
+            Assert.IsNotNull(result.Data.Subscription);
+            Assert.AreEqual("John", result.Data.FirstName);
+            Assert.AreEqual("sss", result.Data.Subscription.SubscriptionId);
             Assert.IsNull(result.Error);
         }
 
@@ -55,7 +61,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             var userJwt = new User { Id = 1 };
 
             _userRepositoryMock.Setup(repo => repo.GetUserWithSubscription(userJwt.Id))
-                .ReturnsAsync((Subscription)null);
+                .ReturnsAsync(() => null);
 
             // Act
             var result = await _userService.GetUserData(userJwt);
@@ -64,7 +70,7 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             Assert.IsNotNull(result);
             Assert.IsNull(result.Data);
             Assert.IsNotNull(result.Error);
-            Assert.AreEqual(ErrorCodes.SubscriptionOrUserNotFound.ToString(), result.Error.Message);
+            Assert.AreEqual(ErrorCodes.UserNotFound.ToString(), result.Error.Message);
         }
     }
 }

@@ -15,10 +15,10 @@ namespace Diploma.Backend.Application.Mappers
             return new SurveyUnitResponse
             {
                 Id = model.Id,
-                AppearanceIdName = new Dictionary<int, string>
+                AppearanceIdName = model.UnitAppearance != null ? new Dictionary<int, string>
                 {
                     { model.UnitAppearance.Id, model.UnitAppearance.Name }
-                },
+                } : null,
                 HideAfterNoSurveys = model.UnitSettings.HideAfterNoSurveys,
                 MaximumSurveysPerDevice = model.UnitSettings.MaximumSurveysPerDevice,
                 MessageAfterNoSurveys = model.UnitSettings.MessageAfterNoSurveys,

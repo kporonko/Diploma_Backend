@@ -11,7 +11,7 @@ namespace Diploma.Backend.Domain.Models
     {
         public string Name { get; set; }
         public UnitSettings UnitSettings { get; set; }
-        public int AppearanceId { get; set; }
+        public int? AppearanceId { get; set; }
         public UnitAppearance UnitAppearance { get; set; }
 
         public List<SurveyInUnit> SurveyInUnits { get; set; } = new List<SurveyInUnit>();

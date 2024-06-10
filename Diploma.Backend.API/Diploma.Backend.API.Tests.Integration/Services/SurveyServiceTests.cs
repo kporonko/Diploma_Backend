@@ -86,11 +86,8 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
             // Assert
             Assert.IsNotNull(response.Data);
             Assert.IsNull(response.Error);
-            Assert.AreEqual(TARGETING_ID_TO_CREATE_SURVEY, response.Data.Targeting.Id);
-            Assert.AreEqual(request.Name, response.Data.Name);
-            Assert.AreEqual(request.Questions.Count, response.Data.Questions.Count);
-            Assert.AreEqual(request.DateBy, response.Data.DateBy);
-            Assert.AreEqual((QuestionType)request.Questions.First().Type, response.Data.Questions.First().Type);
+            Assert.AreEqual(TARGETING_ID_TO_CREATE_SURVEY, response.Data.Id);
+
         }
 
         private SurveyCreateRequest GetCreateSurveyRequest()

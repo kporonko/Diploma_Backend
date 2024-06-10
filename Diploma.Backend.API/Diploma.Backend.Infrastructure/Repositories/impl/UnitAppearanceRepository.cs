@@ -48,5 +48,11 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
             _context.UnitAppearances.Add(unitAppearance);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteUnitAppearanceAsync(UnitAppearance unitAppearance)
+        {
+            _context.UnitAppearances.Remove(unitAppearance);
+            await _context.SaveChangesAsync();
+        }
     }
 }

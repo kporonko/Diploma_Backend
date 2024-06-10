@@ -14,5 +14,6 @@ namespace Diploma.Backend.Application.Repositories
         Task<Template> GetTemplateByIdAsync(int templateId);
         Task SaveUnitAppearanceAsync(UnitAppearance unitAppearance);
         Task UpdateUnitAppearanceAsync(UnitAppearance unitAppearance);
+        Task DeleteUnitAppearanceAsync(UnitAppearance unitAppearance);
     }
 }
