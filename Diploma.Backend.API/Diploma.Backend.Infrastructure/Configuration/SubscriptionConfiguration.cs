@@ -21,26 +21,6 @@ namespace Diploma.Backend.Infrastructure.Configuration
                 .HasColumnType("int")
                 .ValueGeneratedOnAdd();
             builder
-                .Property(t => t.Name)
-                .HasColumnType("varchar(255)")
-                .HasColumnName(nameof(Subscription.Name))
-                .IsRequired(false);
-            builder
-                .Property(t => t.IsActive)
-                .HasColumnType("bit")
-                .HasColumnName(nameof(Subscription.IsActive))
-                .IsRequired();
-            builder
-                .Property(t => t.DateChangeStatus)
-                .HasColumnType("datetime")
-                .HasColumnName(nameof(Subscription.DateChangeStatus))
-                .IsRequired();
-            builder
-                .Property(t => t.DateCreate)
-                .HasColumnType("datetime")
-                .HasColumnName(nameof(Subscription.DateCreate))
-                .IsRequired();
-            builder
                 .Property(t => t.SubscriptionId)
                 .HasColumnType("varchar(255)")
                 .HasColumnName(nameof(Subscription.SubscriptionId))

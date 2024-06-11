@@ -39,7 +39,7 @@ namespace Diploma.Backend.Application.Services.Payment.impl
         public async Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequest request, User jwtUser)
         {
             var existingSubscription = _paymentRepository.GetSubscriptionByUserId(jwtUser.Id);
-            if (existingSubscription != null && existingSubscription.IsActive)
+            if (existingSubscription != null)
             {
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<PayPalSubscriptionResponse>(ErrorCodes.SubscriptionAlreadyExists.ToString());
             }
@@ -52,9 +52,6 @@ namespace Diploma.Backend.Application.Services.Payment.impl
             {
                 User = user,
                 UserId = user.Id,
-                IsActive = false,
-                DateCreate = subscrResponse.create_time,
-                DateChangeStatus = subscrResponse.status_update_time >= subscrResponse.create_time ? subscrResponse.status_update_time : subscrResponse.create_time,
                 SubscriptionId = subscrResponse.id,
             };
 
@@ -77,9 +74,6 @@ namespace Diploma.Backend.Application.Services.Payment.impl
             var subscrResponse = await _payPalProxy.ActivateSubscriptionAsync(id, request, token.access_token);
 
             var subscription = _paymentRepository.GetSubscriptionById(id);
-            subscription.IsActive = true;
-            subscription.DateChangeStatus = subscrResponse.status_update_time > new DateTime(1970, 1, 1) ? subscrResponse.status_update_time : DateTime.UtcNow;
-
             _paymentRepository.UpdateSubscription(subscription);
 
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
@@ -93,20 +87,6 @@ namespace Diploma.Backend.Application.Services.Payment.impl
             return BaseResponseGenerator.GenerateValidBaseResponse(planResponse);
         }
 
-        public async Task<BaseResponse<PayPalPaymentResponse>> CapturePayment(string subscrId, PayPalPaymentRequest request)
-        {
-            var token = await _payPalProxy.GetTokenAsync();
-            var paymentResponse = await _payPalProxy.CapturePaymentAsync(subscrId, request, token.access_token);
-
-            var subscription = _paymentRepository.GetSubscriptionById(subscrId);
-            subscription.IsActive = true;
-            subscription.DateChangeStatus = DateTime.UtcNow;
-
-            _paymentRepository.UpdateSubscription(subscription);
-
-            return BaseResponseGenerator.GenerateValidBaseResponse(paymentResponse);
-        }
-
         public async Task<BaseResponse<PayPalProductResponse>> CreateProduct(PayPalProductRequest request)
         {
             var token = await _payPalProxy.GetTokenAsync();
@@ -114,29 +94,7 @@ namespace Diploma.Backend.Application.Services.Payment.impl
 
             return BaseResponseGenerator.GenerateValidBaseResponse(productResponse);
         }
-
-        public async Task HandleActivation(string id)
-        {
-            var subscription = _paymentRepository.GetSubscriptionById(id);
-            if (subscription != null && !subscription.IsActive)
-            {
-                subscription.IsActive = true;
-                subscription.DateChangeStatus = DateTime.UtcNow;
-                _paymentRepository.UpdateSubscription(subscription);
-            }
-        }
-        
-        public async Task HandleSuspend(string id)
-        {
-            var subscription = _paymentRepository.GetSubscriptionById(id);
-            if (subscription != null && subscription.IsActive)
-            {
-                subscription.IsActive = false;
-                subscription.DateChangeStatus = DateTime.UtcNow;
-                _paymentRepository.UpdateSubscription(subscription);
-            }
-        }
-        
+      
         public async Task HandleExpiration(string id)
         {
             var subscription = _paymentRepository.GetSubscriptionById(id);

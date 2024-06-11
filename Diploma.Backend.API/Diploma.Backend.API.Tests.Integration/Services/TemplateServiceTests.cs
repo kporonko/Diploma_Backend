@@ -18,7 +18,7 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private TemplateService _templateService;
         private ITemplateRepository _templateRepository;
 
-        private readonly int EXPECTED_TEMPLATES_COUNT = 1;
+        private readonly int EXPECTED_TEMPLATES_COUNT = 9;
 
         [SetUp]
         public void Setup()

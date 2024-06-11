@@ -17,9 +17,9 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private SurveyUnitService _surveyUnitService;
         private ISurveyUnitRepository _survUnitRepository;
 
-        private readonly int SURVEY_UNIT_ID_TO_GET = 6;
-        private readonly int USER_ID_TO_GET = 3;
-        private readonly int EXPECTED_SURV_UNITS_COUNT = 2;
+        private readonly int SURVEY_UNIT_ID_TO_GET = 4;
+        private readonly int USER_ID_TO_GET = 1;
+        private readonly int EXPECTED_SURV_UNITS_COUNT = 1;
 
         [SetUp]
         public void Setup()
@@ -91,7 +91,7 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
             return new SurveyUnitCreateRequest
             {
                 Name = "Test Survey Unit",
-                AppearanceId = 1,
+                AppearanceId = 1002,
                 HideAfterNoSurveys = false,
                 MaximumSurveysPerDevice = 1,
                 MessageAfterNoSurveys = true,

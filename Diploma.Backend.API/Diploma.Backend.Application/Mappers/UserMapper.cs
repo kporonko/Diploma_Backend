@@ -34,10 +34,6 @@ namespace Diploma.Backend.Application.Mappers
             {
                 Id = subscription.Id,
                 SubscriptionId = subscription.SubscriptionId,
-                DateChangeStatus = subscription.DateChangeStatus,
-                DateCreate = subscription.DateCreate,
-                IsActive = subscription.IsActive,
-                Name = subscription.Name,
                 UserId = subscription.UserId
             };
         }

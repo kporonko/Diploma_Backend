@@ -14,15 +14,12 @@ namespace Diploma.Backend.Application.Services
     {
         Task<BaseResponse<PayPalSubscriptionResponse>> GetSubscription(string id);
         Task<BaseResponse<PayPalPlanResponse>> CreatePlan(PayPalPlanRequest request);
-        Task<BaseResponse<PayPalPaymentResponse>> CapturePayment(string subscrId, PayPalPaymentRequest request);
         Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequest request, User jwtUser);
         Task<BaseResponse<PayPalCancelSubscriptionResponse>> CancelSubscription(string id, PayPalCancelSubscriptionRequest request);
         Task<BaseResponse<PayPalProductResponse>> CreateProduct(PayPalProductRequest request);
         Task<BaseResponse<PayPalSubscriptionResponse>> ActivateSubscription(string id, ActivateSubscriptionRequest request);
 
-        Task HandleActivation(string id);
         Task HandleExpiration(string id);
-        Task HandleSuspend(string id);
 
     }
 }

@@ -17,8 +17,8 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private UserService _userService;
         private IUserRepository _userRepository;
         
-        private readonly int USER_ID_TO_GET = 3;
-        private readonly string SUBSCRIPTION_NUMBER = "I-NNK8RE3115WT";
+        private readonly int USER_ID_TO_GET = 1;
+        private readonly string SUBSCRIPTION_NUMBER = "I-VXMDKRMXT6H4";
 
         [SetUp]
         public void Setup()

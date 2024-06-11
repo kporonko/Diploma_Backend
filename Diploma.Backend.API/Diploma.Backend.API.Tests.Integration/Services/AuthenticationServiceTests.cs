@@ -38,7 +38,7 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
             // Arrange
             var loginRequest = new LoginRequest
             {
-                Email = "user@example.com",
+                Email = "user3@example.com",
                 Password = "Stringst1"
             };
 

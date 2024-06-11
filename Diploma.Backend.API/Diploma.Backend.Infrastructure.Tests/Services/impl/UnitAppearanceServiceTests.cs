@@ -248,5 +248,163 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             Assert.IsNull(result.Error);
             Assert.AreEqual("Test", result.Data.Name);
         }
+
+        [Test]
+        public async Task DeleteUnitAppearance_UserNotFound_ReturnsErrorResponse()
+        {
+            // Arrange
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ReturnsAsync((User)null);
+
+            var userJwt = new User { Id = 1 };
+            var unitAppearanceId = 1;
+
+            // Act
+            var result = await _unitAppearanceService.DeleteUnitAppearance(userJwt, unitAppearanceId);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual(ErrorCodes.UserNotFound.ToString(), result.Error.Message);
+        }
+
+        [Test]
+        public async Task DeleteUnitAppearance_UnitAppearanceNotFound_ReturnsErrorResponse()
+        {
+            // Arrange
+            var user = new User { Id = 1, UnitAppearances = new List<UnitAppearance>() };
+
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ReturnsAsync(user);
+
+            var userJwt = new User { Id = 1 };
+            var unitAppearanceId = 1;
+
+            // Act
+            var result = await _unitAppearanceService.DeleteUnitAppearance(userJwt, unitAppearanceId);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual(ErrorCodes.UnitAppearanceNotFound.ToString(), result.Error.Message);
+        }
+
+        [Test]
+        public async Task DeleteUnitAppearance_ValidRequest_ReturnsSuccessResponse()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                UnitAppearances = new List<UnitAppearance>
+                {
+                    new UnitAppearance { Id = 1, Name = "UA1", State = true }
+                }
+            };
+
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ReturnsAsync(user);
+
+            _unitAppearanceRepositoryMock.Setup(repo => repo.DeleteUnitAppearanceAsync(It.IsAny<UnitAppearance>()))
+                .Returns(Task.CompletedTask);
+
+            var userJwt = new User { Id = 1 };
+            var unitAppearanceId = 1;
+
+            // Act
+            var result = await _unitAppearanceService.DeleteUnitAppearance(userJwt, unitAppearanceId);
+
+            // Assert
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual("Unit appearance deleted successfully", result.Data);
+        }
+
+        [Test]
+        public async Task GetUnitAppearances_ThrowsException_ReturnsErrorResponse()
+        {
+            // Arrange
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var userJwt = new User { Id = 1 };
+
+            // Act
+            var result = await _unitAppearanceService.GetUnitAppearances(userJwt);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual("Database error", result.Error.Message);
+        }
+
+        [Test]
+        public async Task CreateUnitAppearance_ThrowsException_ReturnsErrorResponse()
+        {
+            // Arrange
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserByIdAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var userJwt = new User { Id = 1 };
+            var request = new UnitAppearanceCreateRequest { TemplateId = 1, Name = "Test", Type = "Default", Params = new Dictionary<string, string>() };
+
+            // Act
+            var result = await _unitAppearanceService.CreateUnitAppearance(userJwt, request);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual("Database error", result.Error.Message);
+        }
+
+        [Test]
+        public async Task EditUnitAppearance_ThrowsException_ReturnsErrorResponse()
+        {
+            // Arrange
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var userJwt = new User { Id = 1 };
+            var request = new UnitAppearanceCreateRequest { Id = 1, TemplateId = 1, Name = "Test", Type = "Default", Params = new Dictionary<string, string>() };
+
+            // Act
+            var result = await _unitAppearanceService.EditUnitAppearance(userJwt, request);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual("Database error", result.Error.Message);
+        }
+
+        [Test]
+        public async Task DeleteUnitAppearance_ThrowsException_ReturnsErrorResponse()
+        {
+            // Arrange
+            var user = new User
+            {
+                Id = 1,
+                UnitAppearances = new List<UnitAppearance>
+                {
+                    new UnitAppearance { Id = 1, Name = "UA1", State = true }
+                }
+            };
+
+            _unitAppearanceRepositoryMock.Setup(repo => repo.GetUserWithUnitAppearancesAsync(It.IsAny<int>()))
+                .ReturnsAsync(user);
+
+            _unitAppearanceRepositoryMock.Setup(repo => repo.DeleteUnitAppearanceAsync(It.IsAny<UnitAppearance>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var userJwt = new User { Id = 1 };
+            var unitAppearanceId = 1;
+
+            // Act
+            var result = await _unitAppearanceService.DeleteUnitAppearance(userJwt, unitAppearanceId);
+
+            // Assert
+            Assert.IsNotNull(result.Error);
+            Assert.IsNull(result.Data);
+            Assert.AreEqual("Database error", result.Error.Message);
+        }
     }
 }

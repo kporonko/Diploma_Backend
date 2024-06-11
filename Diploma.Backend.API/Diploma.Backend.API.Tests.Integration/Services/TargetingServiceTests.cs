@@ -18,7 +18,7 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private ITargetingRepository _targetingRepository;
 
         private readonly int TARGETING_ID_TO_GET = 1;
-        private readonly int USER_ID_TO_GET = 3;
+        private readonly int USER_ID_TO_GET = 1;
         private readonly List<int> COUNTRY_IDS_TO_CREATE = new List<int> { 1, 2 };
         private readonly List<int> SURVEY_IDS_TO_CREATE = new List<int> { 1 };
 

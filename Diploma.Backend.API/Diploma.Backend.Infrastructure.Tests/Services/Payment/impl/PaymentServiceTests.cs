@@ -6,10 +6,7 @@ using Diploma.Backend.Application.Services.Payment.impl;
 using Diploma.Backend.Domain.Common;
 using Diploma.Backend.Domain.Models;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NUnit.Framework;
 using System.Threading.Tasks;
 using Diploma.Backend.Domain.Enums;
 
@@ -88,47 +85,13 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
             Assert.AreEqual(subscriptionResponse, result.Data);
         }
 
-        // Add more test cases for other methods...
-
-        [Test]
-        public async Task HandleActivation_WhenSubscriptionExistsAndInactive_UpdatesSubscriptionAndReturnsValidResponse()
-        {
-            // Arrange
-            var id = "subscriptionId";
-            var subscription = new Subscription { IsActive = false };
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(subscription);
-
-            // Act
-            await _paymentService.HandleActivation(id);
-
-            // Assert
-            _mockPaymentRepository.Verify(r => r.UpdateSubscription(subscription), Times.Once);
-            Assert.IsTrue(subscription.IsActive);
-        }
-
-        [Test]
-        public async Task HandleExpiration_WhenSubscriptionExistsAndActive_UpdatesSubscriptionAndReturnsValidResponse()
-        {
-            // Arrange
-            var id = "subscriptionId";
-            var subscription = new Subscription { IsActive = true };
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(subscription);
-
-            // Act
-            await _paymentService.HandleExpiration(id);
-
-            // Assert
-            _mockPaymentRepository.Verify(r => r.UpdateSubscription(subscription), Times.Once);
-            Assert.IsFalse(subscription.IsActive);
-        }
-
         [Test]
         public async Task CreateSubscription_WhenExistingSubscriptionIsActive_ReturnsError()
         {
             // Arrange
             var request = new PayPalSubscriptionRequest();
             var user = new User();
-            var existingSubscription = new Subscription { IsActive = true };
+            var existingSubscription = new Subscription { Id = 1 };
             _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse());
             _mockPaymentRepository.Setup(r => r.GetSubscriptionByUserId(It.IsAny<int>())).Returns(existingSubscription);
 
@@ -158,8 +121,6 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
 
             // Assert
             _mockPaymentRepository.Verify(r => r.UpdateSubscription(subscription), Times.Once);
-            Assert.IsTrue(subscription.IsActive);
-            Assert.AreEqual(subscriptionResponse.status_update_time, subscription.DateChangeStatus);
             Assert.IsInstanceOf<BaseResponse<PayPalSubscriptionResponse>>(result);
             Assert.AreEqual(subscriptionResponse, result.Data);
         }
@@ -183,30 +144,6 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
         }
 
         [Test]
-        public async Task CapturePayment_WhenCalled_ReturnsValidResponseAndUpdateSubscription()
-        {
-            // Arrange
-            var subscrId = "subscriptionId";
-            var request = new PayPalPaymentRequest();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var paymentResponse = new PayPalPaymentResponse();
-            var subscription = new Subscription();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.CapturePaymentAsync(subscrId, request, "token")).ReturnsAsync(paymentResponse);
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(subscrId)).Returns(subscription);
-
-            // Act
-            var result = await _paymentService.CapturePayment(subscrId, request);
-
-            // Assert
-            _mockPaymentRepository.Verify(r => r.UpdateSubscription(subscription), Times.Once);
-            Assert.IsTrue(subscription.IsActive);
-            Assert.IsNotNull(subscription.DateChangeStatus);
-            Assert.IsInstanceOf<BaseResponse<PayPalPaymentResponse>>(result);
-            Assert.AreEqual(paymentResponse, result.Data);
-        }
-
-        [Test]
         public async Task CreateProduct_WhenCalled_ReturnsValidResponse()
         {
             // Arrange
@@ -222,6 +159,35 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
             // Assert
             Assert.IsInstanceOf<BaseResponse<PayPalProductResponse>>(result);
             Assert.AreEqual(productResponse, result.Data);
+        }
+
+        [Test]
+        public async Task HandleExpiration_WhenSubscriptionExists_DeletesSubscription()
+        {
+            // Arrange
+            var id = "subscriptionId";
+            var subscription = new Subscription { SubscriptionId = id };
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(subscription);
+
+            // Act
+            await _paymentService.HandleExpiration(id);
+
+            // Assert
+            _mockPaymentRepository.Verify(r => r.DeleteSubscriptionAsync(subscription), Times.Once);
+        }
+
+        [Test]
+        public async Task HandleExpiration_WhenSubscriptionDoesNotExist_DoesNotDeleteSubscription()
+        {
+            // Arrange
+            var id = "subscriptionId";
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns((Subscription)null);
+
+            // Act
+            await _paymentService.HandleExpiration(id);
+
+            // Assert
+            _mockPaymentRepository.Verify(r => r.DeleteSubscriptionAsync(It.IsAny<Subscription>()), Times.Never);
         }
     }
 }

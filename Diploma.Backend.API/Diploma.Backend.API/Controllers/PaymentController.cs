@@ -100,21 +100,13 @@ namespace Diploma.Backend.API.Controllers
                 var eventType = request.Value<string>("event_type");
                 var subscriptionId = request.SelectToken("resource.id")?.Value<string>();
 
-                if (eventType == "BILLING.SUBSCRIPTION.ACTIVATED")
-                {
-                    HandleSubscriptionActivation(subscriptionId);
-                }
-                else if (eventType == "BILLING.SUBSCRIPTION.EXPIRED")
+                if (eventType == "BILLING.SUBSCRIPTION.EXPIRED")
                 {
                     HandleSubscriptionExpiration(subscriptionId);
                 }
                 else if (eventType == "BILLING.SUBSCRIPTION.CANCELLED")
                 {
                     HandleSubscriptionExpiration(subscriptionId);
-                }
-                else if (eventType == "BILLING.SUBSCRIPTION.SUSPENDED")
-                {
-                    HandleSubscriptionSuspend(subscriptionId);
                 }
                 return Ok("Webhook received and processed");
             }
@@ -127,16 +119,6 @@ namespace Diploma.Backend.API.Controllers
         private void HandleSubscriptionExpiration(string? subscriptionId)
         {
             _payPalService.HandleExpiration(subscriptionId);
-        }
-
-        private void HandleSubscriptionActivation(string? subscriptionId)
-        {
-            _payPalService.HandleActivation(subscriptionId);
-        }
-
-        private void HandleSubscriptionSuspend(string? subscriptionId)
-        {
-            _payPalService.HandleSuspend(subscriptionId);
         }
     }
 

@@ -20,10 +20,10 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private ISurveyRepository _survRepository;
 
         private readonly int SURVEY_ID_TO_GET = 1;
-        private readonly int USER_ID_TO_GET = 3;
+        private readonly int USER_ID_TO_GET = 1;
         private readonly int EXPECTED_QUESTIONS_COUNT = 1;
-        private readonly int EXPECTED_USER_SURVEYS_COUNT = 23;
-        private readonly int TARGETING_ID_TO_CREATE_SURVEY = 1;
+        private readonly int EXPECTED_USER_SURVEYS_COUNT = 24;
+        private readonly int TARGETING_ID_TO_CREATE_SURVEY = 24;
 
         [SetUp]
         public void Setup()

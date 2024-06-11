@@ -17,8 +17,8 @@ namespace Diploma.Backend.Application.Tests.Integration.Services
         private UnitAppearanceService _unitAppearanceService;
         private IUnitAppearanceRepository _unitAppearanceRepository;
 
-        private readonly int USER_ID_TO_GET = 3;
-        private readonly int EXPECTED_UA_COUNT = 8;
+        private readonly int USER_ID_TO_GET = 1;
+        private readonly int EXPECTED_UA_COUNT = 4;
 
         [SetUp]
         public void Setup()
