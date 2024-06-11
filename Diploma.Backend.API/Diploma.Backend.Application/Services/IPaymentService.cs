@@ -22,6 +22,7 @@ namespace Diploma.Backend.Application.Services
 
         Task HandleActivation(string id);
         Task HandleExpiration(string id);
+        Task HandleSuspend(string id);
 
     }
 }

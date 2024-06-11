@@ -75,14 +75,14 @@ namespace Diploma.Backend.API.Controllers
             var response = await _payPalService.ActivateSubscription(id, request);
             return Ok(response);
         }
-        
-        [HttpPost]
-        [Route("capture-payment/{subscrId}")]
-        public async Task<IActionResult> CapturePayment([FromRoute] string subscrId, [FromBody] PayPalPaymentRequest request)
-        {
-            var response = await _payPalService.CapturePayment(subscrId, request);
-            return Ok(response);
-        }
+
+        //[HttpPost]
+        //[Route("capture-payment/{subscrId}")]
+        //public async Task<IActionResult> CapturePayment([FromRoute] string subscrId, [FromBody] PayPalPaymentRequest request)
+        //{
+        //    var response = await _payPalService.CapturePayment(subscrId, request);
+        //    return Ok(response);
+        //}
 
         [HttpPost]
         [Route("paypal-webhook")]
@@ -108,6 +108,14 @@ namespace Diploma.Backend.API.Controllers
                 {
                     HandleSubscriptionExpiration(subscriptionId);
                 }
+                else if (eventType == "BILLING.SUBSCRIPTION.CANCELLED")
+                {
+                    HandleSubscriptionExpiration(subscriptionId);
+                }
+                else if (eventType == "BILLING.SUBSCRIPTION.SUSPENDED")
+                {
+                    HandleSubscriptionSuspend(subscriptionId);
+                }
                 return Ok("Webhook received and processed");
             }
             catch (Exception)
@@ -124,6 +132,11 @@ namespace Diploma.Backend.API.Controllers
         private void HandleSubscriptionActivation(string? subscriptionId)
         {
             _payPalService.HandleActivation(subscriptionId);
+        }
+
+        private void HandleSubscriptionSuspend(string? subscriptionId)
+        {
+            _payPalService.HandleSuspend(subscriptionId);
         }
     }
 

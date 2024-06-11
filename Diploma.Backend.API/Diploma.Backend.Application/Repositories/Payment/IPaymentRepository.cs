@@ -14,5 +14,6 @@ namespace Diploma.Backend.Application.Repositories.Payment
         void UpdateSubscription(Subscription subscription);
         User GetUserById(int userId);
         Subscription GetSubscriptionByUserId(int id);
+        Task DeleteSubscriptionAsync(Subscription subscription);
     }
 }

@@ -45,5 +45,11 @@ namespace Diploma.Backend.Infrastructure.PayPal.Repositories.impl
         {
             return _dbContext.Subscriptions.FirstOrDefault(s => s.UserId == id);
         }
+        
+        public async Task DeleteSubscriptionAsync(Subscription subscription)
+        {
+            _dbContext.Subscriptions.Remove(subscription);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -78,7 +78,7 @@ namespace Diploma.Backend.Application.Services.Payment.impl
 
             var subscription = _paymentRepository.GetSubscriptionById(id);
             subscription.IsActive = true;
-            subscription.DateChangeStatus = subscrResponse.status_update_time;
+            subscription.DateChangeStatus = subscrResponse.status_update_time > new DateTime(1970, 1, 1) ? subscrResponse.status_update_time : DateTime.UtcNow;
 
             _paymentRepository.UpdateSubscription(subscription);
 
@@ -125,8 +125,8 @@ namespace Diploma.Backend.Application.Services.Payment.impl
                 _paymentRepository.UpdateSubscription(subscription);
             }
         }
-
-        public async Task HandleExpiration(string id)
+        
+        public async Task HandleSuspend(string id)
         {
             var subscription = _paymentRepository.GetSubscriptionById(id);
             if (subscription != null && subscription.IsActive)
@@ -134,6 +134,15 @@ namespace Diploma.Backend.Application.Services.Payment.impl
                 subscription.IsActive = false;
                 subscription.DateChangeStatus = DateTime.UtcNow;
                 _paymentRepository.UpdateSubscription(subscription);
+            }
+        }
+        
+        public async Task HandleExpiration(string id)
+        {
+            var subscription = _paymentRepository.GetSubscriptionById(id);
+            if (subscription != null)
+            {
+                await _paymentRepository.DeleteSubscriptionAsync(subscription);
             }
         }
     }
