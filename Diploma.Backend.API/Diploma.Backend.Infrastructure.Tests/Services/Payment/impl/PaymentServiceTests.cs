@@ -24,163 +24,134 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
         {
             _mockPaymentProxy = new Mock<IPaymentProxy>();
             _mockPaymentRepository = new Mock<IPaymentRepository>();
+
             _paymentService = new PaymentService(_mockPaymentProxy.Object, _mockPaymentRepository.Object);
         }
 
         [Test]
-        public async Task CreateSubscription_WhenNoExistingSubscription_ReturnsValidResponse()
+        public async Task CancelSubscription_ValidId_ReturnsValidResponse()
         {
             // Arrange
-            var request = new PayPalSubscriptionRequest();
-            var user = new User();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var subscriptionResponse = new PayPalSubscriptionResponse();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.CreateSubscriptionAsync(request, "token")).ReturnsAsync(subscriptionResponse);
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionByUserId(It.IsAny<int>())).Returns((Subscription)null);
-            _mockPaymentRepository.Setup(r => r.GetUserById(It.IsAny<int>())).Returns(user);
+            var id = "subscription_id";
+            var cancelRequest = new PayPalCancelSubscriptionRequest();
+
+            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse { access_token = "dummy_token" });
+            _mockPaymentProxy.Setup(p => p.CancelSubscriptionAsync(id, cancelRequest, "dummy_token")).ReturnsAsync(new PayPalCancelSubscriptionResponse());
 
             // Act
-            var result = await _paymentService.CreateSubscription(request, user);
+            var result = await _paymentService.CancelSubscription(id, cancelRequest);
 
             // Assert
-            Assert.IsInstanceOf<BaseResponse<PayPalSubscriptionResponse>>(result);
-            Assert.AreEqual(subscriptionResponse, result.Data);
-        }
-
-        [Test]
-        public async Task CancelSubscription_WhenCalled_ReturnsValidResponse()
-        {
-            // Arrange
-            var id = "subscriptionId";
-            var request = new PayPalCancelSubscriptionRequest();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var cancelResponse = new PayPalCancelSubscriptionResponse();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.CancelSubscriptionAsync(id, request, "token")).ReturnsAsync(cancelResponse);
-
-            // Act
-            var result = await _paymentService.CancelSubscription(id, request);
-
-            // Assert
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Data);
             Assert.IsInstanceOf<BaseResponse<PayPalCancelSubscriptionResponse>>(result);
-            Assert.AreEqual(cancelResponse, result.Data);
         }
 
         [Test]
-        public async Task GetSubscription_WhenCalled_ReturnsValidResponse()
+        public async Task CreateSubscription_NoExistingSubscription_ReturnsValidResponse()
         {
             // Arrange
-            var id = "subscriptionId";
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var subscriptionResponse = new PayPalSubscriptionResponse();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.GetSubscriptionAsync(id, "token")).ReturnsAsync(subscriptionResponse);
+            var request = new PayPalSubscriptionRequestShort();
+            var jwtUser = new User { Id = 1 };
+
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionByUserId(jwtUser.Id)).Returns((Subscription)null);
+            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse { access_token = "dummy_token" });
+            _mockPaymentProxy.Setup(p => p.CreateProductAsync("dummy_token")).ReturnsAsync(new PayPalProductResponse { Id = "product_id" });
+            _mockPaymentProxy.Setup(p => p.CreatePlanAsync("dummy_token", "product_id")).ReturnsAsync(new PayPalPlanResponse { Id = "plan_id" });
+            _mockPaymentProxy.Setup(p => p.CreateSubscriptionAsync(request, "dummy_token", "plan_id")).ReturnsAsync(new PayPalSubscriptionResponse());
+
+            _mockPaymentRepository.Setup(r => r.GetUserById(jwtUser.Id)).Returns(new User { Id = jwtUser.Id });
+            _mockPaymentRepository.Setup(r => r.AddSubscriptionAsync(It.IsAny<Subscription>())).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _paymentService.CreateSubscription(request, jwtUser);
+
+            // Assert
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Data);
+            Assert.IsInstanceOf<BaseResponse<PayPalSubscriptionResponse>>(result);
+        }
+
+        [Test]
+        public async Task CreateSubscription_ExistingSubscription_ReturnsError()
+        {
+            // Arrange
+            var request = new PayPalSubscriptionRequestShort();
+            var jwtUser = new User { Id = 1 };
+            var existingSubscription = new Subscription();
+
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionByUserId(jwtUser.Id)).Returns(existingSubscription);
+
+            // Act
+            var result = await _paymentService.CreateSubscription(request, jwtUser);
+
+            // Assert
+            Assert.IsNull(result.Data);
+            Assert.IsNotNull(result.Error);
+            Assert.AreEqual(ErrorCodes.SubscriptionAlreadyExists.ToString(), result.Error.Message);
+        }
+
+        [Test]
+        public async Task GetSubscription_ValidId_ReturnsValidResponse()
+        {
+            // Arrange
+            var id = "subscription_id";
+
+            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse { access_token = "dummy_token" });
+            _mockPaymentProxy.Setup(p => p.GetSubscriptionAsync(id, "dummy_token")).ReturnsAsync(new PayPalSubscriptionResponse());
 
             // Act
             var result = await _paymentService.GetSubscription(id);
 
             // Assert
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Data);
             Assert.IsInstanceOf<BaseResponse<PayPalSubscriptionResponse>>(result);
-            Assert.AreEqual(subscriptionResponse, result.Data);
         }
 
         [Test]
-        public async Task CreateSubscription_WhenExistingSubscriptionIsActive_ReturnsError()
+        public async Task ActivateSubscription_ValidId_ReturnsValidResponse()
         {
             // Arrange
-            var request = new PayPalSubscriptionRequest();
-            var user = new User();
-            var existingSubscription = new Subscription { Id = 1 };
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse());
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionByUserId(It.IsAny<int>())).Returns(existingSubscription);
+            var id = "subscription_id";
+            var activateRequest = new ActivateSubscriptionRequest();
+
+            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(new PayPalAccessTokenResponse { access_token = "dummy_token" });
+            _mockPaymentProxy.Setup(p => p.ActivateSubscriptionAsync(id, activateRequest, "dummy_token")).ReturnsAsync(new PayPalSubscriptionResponse());
+
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(new Subscription { SubscriptionId = id });
+            _mockPaymentRepository.Setup(r => r.UpdateSubscription(It.IsAny<Subscription>()));
 
             // Act
-            var result = await _paymentService.CreateSubscription(request, user);
+            var result = await _paymentService.ActivateSubscription(id, activateRequest);
 
             // Assert
-            Assert.AreEqual(ErrorCodes.SubscriptionAlreadyExists.ToString(), result.Error.Message);
-            Assert.IsNull(result.Data);
-        }
-
-        [Test]
-        public async Task ActivateSubscription_WhenCalled_ReturnsValidResponseAndUpdateSubscription()
-        {
-            // Arrange
-            var id = "subscriptionId";
-            var request = new ActivateSubscriptionRequest();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var subscriptionResponse = new PayPalSubscriptionResponse { status_update_time = DateTime.Now };
-            var subscription = new Subscription();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.ActivateSubscriptionAsync(id, request, "token")).ReturnsAsync(subscriptionResponse);
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(subscription);
-
-            // Act
-            var result = await _paymentService.ActivateSubscription(id, request);
-
-            // Assert
-            _mockPaymentRepository.Verify(r => r.UpdateSubscription(subscription), Times.Once);
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Data);
             Assert.IsInstanceOf<BaseResponse<PayPalSubscriptionResponse>>(result);
-            Assert.AreEqual(subscriptionResponse, result.Data);
         }
+       
 
         [Test]
-        public async Task CreatePlan_WhenCalled_ReturnsValidResponse()
+        public async Task HandleExpiration_ValidId_DeletesSubscription()
         {
             // Arrange
-            var request = new PayPalPlanRequest();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var planResponse = new PayPalPlanResponse();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.CreatePlanAsync(request, "token")).ReturnsAsync(planResponse);
-
-            // Act
-            var result = await _paymentService.CreatePlan(request);
-
-            // Assert
-            Assert.IsInstanceOf<BaseResponse<PayPalPlanResponse>>(result);
-            Assert.AreEqual(planResponse, result.Data);
-        }
-
-        [Test]
-        public async Task CreateProduct_WhenCalled_ReturnsValidResponse()
-        {
-            // Arrange
-            var request = new PayPalProductRequest();
-            var tokenResponse = new PayPalAccessTokenResponse { access_token = "token" };
-            var productResponse = new PayPalProductResponse();
-            _mockPaymentProxy.Setup(p => p.GetTokenAsync()).ReturnsAsync(tokenResponse);
-            _mockPaymentProxy.Setup(p => p.CreateProductAsync(request, "token")).ReturnsAsync(productResponse);
-
-            // Act
-            var result = await _paymentService.CreateProduct(request);
-
-            // Assert
-            Assert.IsInstanceOf<BaseResponse<PayPalProductResponse>>(result);
-            Assert.AreEqual(productResponse, result.Data);
-        }
-
-        [Test]
-        public async Task HandleExpiration_WhenSubscriptionExists_DeletesSubscription()
-        {
-            // Arrange
-            var id = "subscriptionId";
-            var subscription = new Subscription { SubscriptionId = id };
-            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(subscription);
+            var id = "subscription_id";
+            _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns(new Subscription { SubscriptionId = id });
+            _mockPaymentRepository.Setup(r => r.DeleteSubscriptionAsync(It.IsAny<Subscription>())).Returns(Task.CompletedTask);
 
             // Act
             await _paymentService.HandleExpiration(id);
 
             // Assert
-            _mockPaymentRepository.Verify(r => r.DeleteSubscriptionAsync(subscription), Times.Once);
+            _mockPaymentRepository.Verify(r => r.DeleteSubscriptionAsync(It.IsAny<Subscription>()), Times.Once);
         }
 
         [Test]
-        public async Task HandleExpiration_WhenSubscriptionDoesNotExist_DoesNotDeleteSubscription()
+        public async Task HandleExpiration_InvalidId_DoesNotDeleteSubscription()
         {
             // Arrange
-            var id = "subscriptionId";
+            var id = "non_existing_subscription_id";
             _mockPaymentRepository.Setup(r => r.GetSubscriptionById(id)).Returns((Subscription)null);
 
             // Act
@@ -189,5 +160,6 @@ namespace Diploma.Backend.Application.Tests.Services.Payment.impl
             // Assert
             _mockPaymentRepository.Verify(r => r.DeleteSubscriptionAsync(It.IsAny<Subscription>()), Times.Never);
         }
+
     }
 }

@@ -15,32 +15,14 @@ namespace Diploma.Backend.API.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _payPalService;
-
         public PaymentController(IPaymentService payPalService)
         {
             _payPalService = payPalService;
         }
 
         [HttpPost]
-        [Route("create-plan")]
-        public async Task<IActionResult> CreatePlan([FromBody] PayPalPlanRequest request)
-        {
-            var response = await _payPalService.CreatePlan(request);
-            return Ok(response);
-        }
-
-        [HttpPost]
-        [Route("create-product")]
-        public async Task<IActionResult> CreateProduct([FromBody] PayPalProductRequest request)
-        {
-            var response = await _payPalService.CreateProduct(request);
-            return Ok(response);
-        }
-
-        
-        [HttpPost]
         [Route("create-subscription")]
-        public async Task<IActionResult> CreateSubscription([FromBody] PayPalSubscriptionRequest request)
+        public async Task<IActionResult> CreateSubscription([FromBody] PayPalSubscriptionRequestShort request)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = CurrentUserRetriever.GetCurrentUser(identity);
@@ -48,7 +30,12 @@ namespace Diploma.Backend.API.Controllers
             {
                 return Unauthorized(user);
             }
+
             var response = await _payPalService.CreateSubscription(request, user.Data);
+            if (response.Error != null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -57,6 +44,10 @@ namespace Diploma.Backend.API.Controllers
         public async Task<IActionResult> CancelSubscription([FromBody] PayPalCancelSubscriptionRequest request, [FromRoute] string id)
         {
             var response = await _payPalService.CancelSubscription(id, request);
+            if (response.Error != null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -65,6 +56,10 @@ namespace Diploma.Backend.API.Controllers
         public async Task<IActionResult> GetSubscription([FromRoute] string id)
         {
             var response = await _payPalService.GetSubscription(id);
+            if (response.Error != null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 
@@ -73,6 +68,10 @@ namespace Diploma.Backend.API.Controllers
         public async Task<IActionResult> ActivateSubscription([FromRoute] string id, [FromBody] ActivateSubscriptionRequest request)
         {
             var response = await _payPalService.ActivateSubscription(id, request);
+            if (response.Error != null)
+            {
+                return BadRequest(response);
+            }
             return Ok(response);
         }
 

@@ -36,7 +36,7 @@ namespace Diploma.Backend.Application.Services.Payment.impl
             return BaseResponseGenerator.GenerateValidBaseResponse(cancelResponse);
         }
 
-        public async Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequest request, User jwtUser)
+        public async Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequestShort request, User jwtUser)
         {
             var existingSubscription = _paymentRepository.GetSubscriptionByUserId(jwtUser.Id);
             if (existingSubscription != null)
@@ -44,10 +44,16 @@ namespace Diploma.Backend.Application.Services.Payment.impl
                 return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<PayPalSubscriptionResponse>(ErrorCodes.SubscriptionAlreadyExists.ToString());
             }
             var token = await _payPalProxy.GetTokenAsync();
-            var subscrResponse = await _payPalProxy.CreateSubscriptionAsync(request, token.access_token);
 
+            var product = await _payPalProxy.CreateProductAsync(token.access_token);
+            var plan = await _payPalProxy.CreatePlanAsync(token.access_token, product.Id);
+            var subscrResponse = await _payPalProxy.CreateSubscriptionAsync(request, token.access_token, plan.Id);
             var user = _paymentRepository.GetUserById(jwtUser.Id);
 
+            if (user == null)
+            {
+                return BaseResponseGenerator.GenerateBaseResponseByErrorMessage<PayPalSubscriptionResponse>(ErrorCodes.UserNotFound.ToString());
+            }
             var subscription = new Subscription
             {
                 User = user,
@@ -77,22 +83,6 @@ namespace Diploma.Backend.Application.Services.Payment.impl
             _paymentRepository.UpdateSubscription(subscription);
 
             return BaseResponseGenerator.GenerateValidBaseResponse(subscrResponse);
-        }
-
-        public async Task<BaseResponse<PayPalPlanResponse>> CreatePlan(PayPalPlanRequest request)
-        {
-            var token = await _payPalProxy.GetTokenAsync();
-            var planResponse = await _payPalProxy.CreatePlanAsync(request, token.access_token);
-
-            return BaseResponseGenerator.GenerateValidBaseResponse(planResponse);
-        }
-
-        public async Task<BaseResponse<PayPalProductResponse>> CreateProduct(PayPalProductRequest request)
-        {
-            var token = await _payPalProxy.GetTokenAsync();
-            var productResponse = await _payPalProxy.CreateProductAsync(request, token.access_token);
-
-            return BaseResponseGenerator.GenerateValidBaseResponse(productResponse);
         }
       
         public async Task HandleExpiration(string id)

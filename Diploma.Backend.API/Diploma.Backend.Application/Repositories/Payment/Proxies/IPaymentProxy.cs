@@ -11,12 +11,11 @@ namespace Diploma.Backend.Application.Repositories.Payment.Proxies
     public interface IPaymentProxy
     {
         Task<PayPalAccessTokenResponse> GetTokenAsync();
-        Task<PayPalSubscriptionResponse> CreateSubscriptionAsync(PayPalSubscriptionRequest request, string token);
+        Task<PayPalSubscriptionResponse> CreateSubscriptionAsync(PayPalSubscriptionRequestShort request, string token, string planId);
         Task<PayPalSubscriptionResponse> GetSubscriptionAsync(string id, string token);
         Task<PayPalCancelSubscriptionResponse> CancelSubscriptionAsync(string id, PayPalCancelSubscriptionRequest request, string token);
         Task<PayPalSubscriptionResponse> ActivateSubscriptionAsync(string id, ActivateSubscriptionRequest request, string token);
-        Task<PayPalPlanResponse> CreatePlanAsync(PayPalPlanRequest request, string token);
-        Task<PayPalPaymentResponse> CapturePaymentAsync(string subscrId, PayPalPaymentRequest request, string token);
-        Task<PayPalProductResponse> CreateProductAsync(PayPalProductRequest request, string token);
+        Task<PayPalPlanResponse> CreatePlanAsync(string token, string productId);
+        Task<PayPalProductResponse> CreateProductAsync(string token);
     }
 }

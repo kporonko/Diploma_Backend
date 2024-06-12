@@ -15,16 +15,5 @@ namespace Diploma.Backend.Application.Dto.Request
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        [JsonProperty("category")]
-        public string Category { get; set; }
-
-        [JsonProperty("image_url")]
-        public string ImageUrl { get; set; }
-
-        [JsonProperty("home_url")]
-        public string HomeUrl { get; set; }
     }
 }

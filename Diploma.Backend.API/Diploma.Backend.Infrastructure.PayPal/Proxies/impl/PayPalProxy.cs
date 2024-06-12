@@ -2,6 +2,7 @@
 using Diploma.Backend.Application.Dto.Response;
 using Diploma.Backend.Application.Repositories.Payment.Proxies;
 using Diploma.Backend.Infrastructure.PayPal.Facades;
+using Diploma.Backend.Infrastructure.PayPal.Helpers;
 using Diploma.Backend.Infrastructure.PayPal.Models;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -16,11 +17,13 @@ namespace Diploma.Backend.Infrastructure.PayPal.Proxies.impl
     {
         private readonly IPayPalFacade _payPalFacade;
         private readonly PayPalConfig _configuration;
+        private readonly IConfiguration _configurationExtension;
 
         public PayPalProxy(IConfiguration configuration, IPayPalFacade payPalFacade)
         {
             _configuration = new PayPalConfig(configuration);
             _payPalFacade = payPalFacade;
+            _configurationExtension = configuration;
         }
 
         public async Task<PayPalAccessTokenResponse> GetTokenAsync()
@@ -37,11 +40,16 @@ namespace Diploma.Backend.Infrastructure.PayPal.Proxies.impl
             return await Task.FromResult(tokenResponse);
         }
 
-        public async Task<PayPalSubscriptionResponse> CreateSubscriptionAsync(PayPalSubscriptionRequest request, string token)
+        public async Task<PayPalSubscriptionResponse> CreateSubscriptionAsync(PayPalSubscriptionRequestShort request, string token, string planId)
         {
+            var requestPayPal = new PayPalRequestGenerator(_configurationExtension).GenerateSubscriptionRequest();
+            requestPayPal.plan_id = planId;
+            requestPayPal.start_time = DateTime.UtcNow.AddMinutes(1);
+            requestPayPal.application_context.return_url = request.ReturnUrl;
+            requestPayPal.application_context.cancel_url = request.CancelUrl;
             return await Task.FromResult(_payPalFacade.Post<PayPalSubscriptionResponse>(
                 _configuration.CreateSubscriptionUrl,
-                request,
+                requestPayPal,
                 null,
                 new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } }
             ));
@@ -80,8 +88,10 @@ namespace Diploma.Backend.Infrastructure.PayPal.Proxies.impl
             ));
         }
 
-        public async Task<PayPalPlanResponse> CreatePlanAsync(PayPalPlanRequest request, string token)
+        public async Task<PayPalPlanResponse> CreatePlanAsync(string token, string productId)
         {
+            var request = new PayPalRequestGenerator(_configurationExtension).GeneratePlanRequest();
+            request.ProductId = productId;
             return await Task.FromResult(_payPalFacade.Post<PayPalPlanResponse>(
                 _configuration.CreatePlanUrl,
                 request,
@@ -90,22 +100,12 @@ namespace Diploma.Backend.Infrastructure.PayPal.Proxies.impl
             ));
         }
 
-        public async Task<PayPalPaymentResponse> CapturePaymentAsync(string subscrId, PayPalPaymentRequest request, string token)
+        public async Task<PayPalProductResponse> CreateProductAsync(string token)
         {
-            var url = _configuration.CapturePaymentUrl.Replace("{id}", subscrId);
-            return await Task.FromResult(_payPalFacade.Post<PayPalPaymentResponse>(
-                url,
-                request,
-                null,
-                new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } }
-            ));
-        }
-
-        public async Task<PayPalProductResponse> CreateProductAsync(PayPalProductRequest request, string token)
-        {
+            var requestPayPal = new PayPalRequestGenerator(_configurationExtension).GenerateProductRequest();
             return await Task.FromResult(_payPalFacade.Post<PayPalProductResponse>(
                 _configuration.CreateProductUrl,
-                request,
+                requestPayPal,
                 null,
                 new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } }
             ));

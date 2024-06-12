@@ -13,10 +13,8 @@ namespace Diploma.Backend.Application.Services
     public interface IPaymentService
     {
         Task<BaseResponse<PayPalSubscriptionResponse>> GetSubscription(string id);
-        Task<BaseResponse<PayPalPlanResponse>> CreatePlan(PayPalPlanRequest request);
-        Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequest request, User jwtUser);
+        Task<BaseResponse<PayPalSubscriptionResponse>> CreateSubscription(PayPalSubscriptionRequestShort request, User jwtUser);
         Task<BaseResponse<PayPalCancelSubscriptionResponse>> CancelSubscription(string id, PayPalCancelSubscriptionRequest request);
-        Task<BaseResponse<PayPalProductResponse>> CreateProduct(PayPalProductRequest request);
         Task<BaseResponse<PayPalSubscriptionResponse>> ActivateSubscription(string id, ActivateSubscriptionRequest request);
 
         Task HandleExpiration(string id);

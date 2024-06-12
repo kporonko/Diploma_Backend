@@ -88,13 +88,13 @@ namespace Diploma.Backend.Application.Tests.Services.impl
             var loginRequest = new LoginRequest
             {
                 Email = "test@email.com",
-                Password = "wrongpassword",
+                Password = "$2a$10$1GOjLmgV8Biba1na0uMynu6DyHM./hhvy5YvUFhv1RLvKyI0JKWfO",
             };
 
             var user = new User
             {
                 Email = loginRequest.Email,
-                Password = "correcthash",
+                Password = "$2a$10$9zVSXQGdHXHG7FMMnIIGROUGunC1RbjRsfIpOKRQ9.TppFaNGPnEK",
             };
 
             _authRepository.GetUserByEmailAsync(loginRequest.Email).Returns(Task.FromResult(user));
