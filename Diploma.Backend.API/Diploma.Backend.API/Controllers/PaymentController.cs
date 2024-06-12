@@ -21,7 +21,7 @@ namespace Diploma.Backend.API.Controllers
         }
 
         [HttpPost]
-        [Route("create-subscription")]
+        [Route("subscription")]
         public async Task<IActionResult> CreateSubscription([FromBody] PayPalSubscriptionRequestShort request)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -108,6 +108,4 @@ namespace Diploma.Backend.API.Controllers
             _payPalService.HandleExpiration(subscriptionId);
         }
     }
-
-    
 }
