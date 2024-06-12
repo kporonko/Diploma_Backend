@@ -89,18 +89,18 @@ namespace Diploma.Backend.Application.Services.impl
         /// <returns>Base response user entity. Filled with access token if request was valid. Otherwise filled with error message.</returns>
         private async Task<BaseResponse<User>> GetUser(LoginRequest loginRequest)
         {
-            var passwordHash = loginRequest.Password.ConvertPasswordToHash();
             User? user = await _authRepository.GetUserByEmailAsync(loginRequest.Email);
 
-            bool isPasswordMatch = passwordHash == user?.Password;
-            if (!isPasswordMatch)
+            if (user != null && BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+            {
+                return BaseResponseGenerator.GenerateValidBaseResponse<User>(user);
+            }
+            else
             {
                 return user is null ?
-                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.UnexistingEmailException.ToString()) :
-                     BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidPasswordException.ToString());
+                    BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.UnexistingEmailException.ToString()) :
+                    BaseResponseGenerator.GenerateBaseResponseByErrorMessage<User>(ErrorCodes.InvalidPasswordException.ToString());
             }
-
-            return BaseResponseGenerator.GenerateValidBaseResponse<User>(user);
         }
 
         /// <summary>

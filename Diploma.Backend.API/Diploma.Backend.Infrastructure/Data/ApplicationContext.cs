@@ -24,6 +24,7 @@ namespace Diploma.Backend.Infrastructure.Data
         {
         }
 
+        #region DbSets
         public DbSet<User> Users { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Survey> Surveys { get; set; }
@@ -40,8 +41,10 @@ namespace Diploma.Backend.Infrastructure.Data
         public DbSet<Template> Templates { get; set; }
         public DbSet<QuestionLine> QuestionLines { get; set; }
 
+        #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Configurations
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
             modelBuilder.ApplyConfiguration(new TargetingConfiguration());
@@ -57,7 +60,9 @@ namespace Diploma.Backend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new UnitAppearanceConfiguration());
             modelBuilder.ApplyConfiguration(new TemplateConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionLineConfiguration());
+            #endregion
 
+            #region Relations
             modelBuilder.Entity<User>()
                 .HasKey(k => k.Id);
             modelBuilder.Entity<Subscription>()
@@ -209,6 +214,8 @@ namespace Diploma.Backend.Infrastructure.Data
                 .HasForeignKey(u => u.UserId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

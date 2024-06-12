@@ -16,14 +16,9 @@ namespace Diploma.Backend.Domain.Extensions
         /// <returns>Hash of password.</returns>
         public static string ConvertPasswordToHash(this string password)
         {
-            using SHA256 sha256Hash = SHA256.Create();
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                builder.Append(bytes[i].ToString("x2"));
-            }
-            return builder.ToString();
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+            return hashedPassword;
         }
     }
 }

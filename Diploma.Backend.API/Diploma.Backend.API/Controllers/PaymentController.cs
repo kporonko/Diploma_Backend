@@ -76,14 +76,6 @@ namespace Diploma.Backend.API.Controllers
             return Ok(response);
         }
 
-        //[HttpPost]
-        //[Route("capture-payment/{subscrId}")]
-        //public async Task<IActionResult> CapturePayment([FromRoute] string subscrId, [FromBody] PayPalPaymentRequest request)
-        //{
-        //    var response = await _payPalService.CapturePayment(subscrId, request);
-        //    return Ok(response);
-        //}
-
         [HttpPost]
         [Route("paypal-webhook")]
         public async Task<IActionResult> ReceiveWebhook()
@@ -100,11 +92,7 @@ namespace Diploma.Backend.API.Controllers
                 var eventType = request.Value<string>("event_type");
                 var subscriptionId = request.SelectToken("resource.id")?.Value<string>();
 
-                if (eventType == "BILLING.SUBSCRIPTION.EXPIRED")
-                {
-                    HandleSubscriptionExpiration(subscriptionId);
-                }
-                else if (eventType == "BILLING.SUBSCRIPTION.CANCELLED")
+                if (eventType == "BILLING.SUBSCRIPTION.EXPIRED" || eventType == "BILLING.SUBSCRIPTION.CANCELLED")
                 {
                     HandleSubscriptionExpiration(subscriptionId);
                 }
