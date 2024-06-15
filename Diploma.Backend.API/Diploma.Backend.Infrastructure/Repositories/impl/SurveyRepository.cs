@@ -46,6 +46,8 @@ namespace Diploma.Backend.Infrastructure.Repositories.impl
                     .ThenInclude(q => q.QuestionLine)
                     .ThenInclude(ql => ql.QuestionTranslations)
                 .Include(s => s.Targeting)
+                    .ThenInclude(c => c.CountryInTargetings)
+                    .ThenInclude(c => c.Country)
                 .FirstOrDefaultAsync(x => x.Id == surveyId);
         }
 
